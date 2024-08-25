@@ -13,11 +13,11 @@ import retrofit2.http.POST
 
 interface ApiService {
     @POST("api/user/Login")
-    fun login(@Body request: LoginRequest): Call<LoginResponse>
+    suspend fun login(@Body request: LoginRequest): LoginResponse
 
     @POST("api/user/register")
-    fun registerUser(@Body registerRequest: RegisterRequest): Call<RegisterResponse>
+    suspend fun registerUser(@Body registerRequest: RegisterRequest): RegisterResponse
 
     @POST("api/userBiodata/addUserBiodata")
-    fun registerUserBiodata(@Body registerUserBiodataRequest: RegisterUserBiodataRequest): Call<RegisterUserBiodataResponse>
+    suspend fun registerUserBiodata(@Body registerUserBiodataRequest: RegisterUserBiodataRequest): RegisterUserBiodataResponse
 }

@@ -22,8 +22,8 @@
         android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="20dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
@@ -39,8 +39,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
             android:layout_marginTop="14dp"
+            android:fontFamily="@font/poppins_regular"
             android:text="Lengkapi formulir di bawah ini untuk membuat akun dan mulai menggunakan MedsR."
             android:textColor="@color/neutral80"
             android:textSize="12sp" />
@@ -75,7 +75,7 @@
             android:textSize="12sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField"
+            android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
