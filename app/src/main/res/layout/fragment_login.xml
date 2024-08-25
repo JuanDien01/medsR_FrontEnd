@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
-            android:text="Email"
+            android:text="Username"
             android:textColor="@color/neutral80"
             android:textSize="12sp" />
 
@@ -87,7 +87,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email" />
+                android:hint="Username" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
