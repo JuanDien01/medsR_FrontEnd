@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">aplikasiObat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="Welcome">Selamat</string>
+    <string name="selamat_datang_di_nmedsr">Selamat Datang di \nMedsR</string>
+    <string name="desc_welcome">Aplikasi ini akan secara otomatis mengingatkan Anda untuk meminum obat sesuai dengan resep dokter Anda.</string>
+    <string name="masuk">Masuk</string>
+    <string name="buat_akun">Buat Akun</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="gender">
+        <item>Laki-Laki</item>
+        <item>Perempuan</item>
+    </string-array>
+</resources>
