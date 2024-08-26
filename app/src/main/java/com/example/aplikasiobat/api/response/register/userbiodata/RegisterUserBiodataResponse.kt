@@ -1,10 +1,13 @@
 package com.example.aplikasiobat.api.response.register.userbiodata
 
+
+import com.google.gson.annotations.SerializedName
+
 data class RegisterUserBiodataResponse(
-    val alamat: String,
-    val email: String,
-    val jenisKelamin: String,
-    val namaPengguna: String,
-    val nomorTelfon: String,
-    val tanggalLahir: String
+    @SerializedName("data")
+    val `data`: Data,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("status")
+    val status: String
 )

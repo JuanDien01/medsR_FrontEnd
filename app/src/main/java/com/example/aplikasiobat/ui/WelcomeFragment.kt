@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.example.aplikasiobat.R
-import com.example.aplikasiobat.databinding.FragmentLoginBinding
 import com.example.aplikasiobat.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment : Fragment() {
@@ -30,7 +29,7 @@ class WelcomeFragment : Fragment() {
             it.findNavController().navigate(R.id.action_welcomeFragment_to_loginFragment)
         }
         binding.btnRegister.setOnClickListener {
-            it.findNavController().navigate(R.id.action_welcomeFragment_to_registerFragment)
+            it.findNavController().navigate(R.id.action_welcomeFragment_to_biodataFragment)
         }
     }
 }
