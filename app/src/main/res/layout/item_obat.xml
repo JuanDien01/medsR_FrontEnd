@@ -1,52 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cv_obat"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/success_border">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:padding="16dp">
 
+        <!-- Left Icon -->
         <ImageView
-            android:layout_width="108px"
-            android:layout_height="108px"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/icon_obat"/>
+            android:id="@+id/icon_obat"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/round_icon_background"
+            android:src="@drawable/icon_obat" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+
+
+        <!-- Medication Name -->
+        <TextView
+            android:id="@+id/nama_obat"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_toEndOf="@id/icon_obat"
+            android:layout_marginStart="12dp"
+            android:layout_alignParentTop="true"
+            android:text="Bodrex"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/neutral100"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_NamaObat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nama Obat"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <!-- Medication Dosage -->
+        <TextView
+            android:id="@+id/dosis_obat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/icon_obat"
+            android:layout_marginStart="12dp"
+            android:layout_below="@id/nama_obat"
+            android:text="1 tablet"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/neutral90"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_Dosis"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dosis"
-                android:textSize="14sp" />
+        <!-- Time Button -->
+        <TextView
+            android:id="@+id/waktu_obat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/neutral_rounded_background"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:fontFamily="@font/poppins_regular"
+            android:text="08:00"
+            android:textColor="@color/neutral90"
+            android:textSize="16sp" />
 
-        </LinearLayout>
-
-
-
-
-    </LinearLayout>
-
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

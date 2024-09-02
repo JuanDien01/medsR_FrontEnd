@@ -27,8 +27,12 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val email = arguments?.getString("email")
-        Log.d("email", "onViewCreated: $email")
-        binding.email.setText(email)
+//        val email = arguments?.getString("email")
+//        Log.d("email", "onViewCreated: $email")
+//        binding.email.setText(email)
+        val semuaFragment = SemuaFragment()
+        binding.chipSemua.setOnClickListener {
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container, semuaFragment).commit()
+        }
     }
 }

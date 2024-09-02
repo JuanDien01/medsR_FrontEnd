@@ -8,4 +8,5 @@ class ApiHelper(private val apiService: ApiService) {
     suspend fun registerUser(registerRequest: RegisterRequest)= apiService.registerUser(registerRequest)
     suspend fun registerUserBiodata(registerUserBiodataRequest: RegisterUserBiodataRequest)= apiService.registerUserBiodata(registerUserBiodataRequest)
     suspend fun login(request: LoginRequest)= apiService.login(request)
+    suspend fun getObatPasien(idUser:Int)= apiService.getObatPasienById(idUser)
 }

@@ -39,4 +39,13 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }
     }
+
+    fun getObatPasien(idUser:Int) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.getObatPasien(idUser)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
 }

@@ -24,4 +24,7 @@
     <color name="success_main">#43936C</color>
     <color name="info_main">#3267E3</color>
     <color name="neutral30">#EDEDED</color>
+    <color name="success_border">#C0DBCE</color>
+    <color name="danger_border">#EEBDBA</color>
+    <color name="danger_surface">#FFF3F2</color>
 </resources>
