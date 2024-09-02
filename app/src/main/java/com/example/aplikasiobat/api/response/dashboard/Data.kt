@@ -9,5 +9,10 @@ data class Data(
     @SerializedName("namaObat")
     val namaObat: String,
     @SerializedName("waktuMinumObat")
-    val waktuMinumObat: String
+    val waktuMinumObat: String,
+    @SerializedName("catatan")
+    val catatan:String,
+    @SerializedName("sudahMinumObat")
+    val sudahMinumObat:String?=null
+
 )
