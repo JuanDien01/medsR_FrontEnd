@@ -8,13 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aplikasiobat.R
+import com.example.aplikasiobat.adapter.ObatPasienAdapter
+import com.example.aplikasiobat.api.response.dashboard.Data
+import com.example.aplikasiobat.api.response.dashboard.GetObatPasienResponse
 import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentSemuaBinding
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
+import com.google.gson.Gson
 
 class SemuaFragment : Fragment() {
 
@@ -22,6 +27,7 @@ class SemuaFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var adapter: ObatPasienAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,24 +43,25 @@ class SemuaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getObatPasien()
-    }
-    private fun getObatPasien(){
-        mainViewModel.getObatPasien(103).observe(viewLifecycleOwner){resource ->
-            when(resource.status){
-                Status.SUCCESS -> {
-                    resource.data?.let { response->
-                        Log.d("dataObatPasien", "getObatPasien: ")
-                    }
-                }
-                Status.ERROR -> {
-                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
-                    Log.d("dataObatPasien", "dataObatPasien: ${resource.message}")
-                }
-                Status.LOADING -> {
+        arguments?.getString("obatPasienData")?.let { jsonString ->
+            val gson = Gson()
+            val obatPasienData = gson.fromJson(jsonString, GetObatPasienResponse::class.java)
+            initRecyclerView(obatPasienData.data)
 
-                }
-            }
+            // Use obatPasienData here
+            Log.d("dataObatPasien", "Obat Pasien Data: $obatPasienData")
         }
     }
+
+    private fun initRecyclerView(obatPasienList: List<Data>) {
+        adapter = ObatPasienAdapter(obatPasienList)
+        binding.RcyViewSemua.layoutManager = LinearLayoutManager(context)
+        binding.RcyViewSemua.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

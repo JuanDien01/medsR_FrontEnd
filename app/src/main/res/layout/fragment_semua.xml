@@ -6,9 +6,9 @@
     tools:context=".ui.SemuaFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RcyViewSemua"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_obat"/>
-
 
 </FrameLayout>

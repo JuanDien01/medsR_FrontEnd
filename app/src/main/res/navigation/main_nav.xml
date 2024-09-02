@@ -57,5 +57,10 @@
         android:id="@+id/dashboardFragment"
         android:name="com.example.aplikasiobat.ui.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <argument
+            android:name="userId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

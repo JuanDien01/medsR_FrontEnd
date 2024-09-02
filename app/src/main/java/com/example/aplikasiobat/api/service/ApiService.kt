@@ -25,5 +25,5 @@ interface ApiService {
     suspend fun registerUserBiodata(@Body registerUserBiodataRequest: RegisterUserBiodataRequest): RegisterUserBiodataResponse
 
     @GET("api/obatPasien/getObatPasienById/{idUser}")
-    suspend fun getObatPasienById(@Path("idUser") idUser:Int):GetObatPasienResponse
+    suspend fun getObatPasienById(@Path("idUser") idUser:Int): GetObatPasienResponse
 }

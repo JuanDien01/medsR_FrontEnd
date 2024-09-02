@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -20,6 +21,7 @@ android {
     buildFeatures{
         viewBinding=true
     }
+
 
     buildTypes {
         release {

@@ -4,5 +4,6 @@ data class Data(
     val role: Role,
     val token: String,
     val userId: Int,
-    val userName: String
+    val userName: String,
+    val fullName:String
 )

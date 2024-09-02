@@ -66,7 +66,10 @@ class LoginFragment : Fragment() {
                 Status.SUCCESS -> {
                     Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
                     Log.d("api", "registerUser: ${resource.data}")
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    val bundle = Bundle()
+                    bundle.putInt("userId", resource.data?.data?.userId!!)
+                    bundle.putString("Fullname", resource.data.data.fullName)
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment,bundle)
                 }
 
                 Status.ERROR -> {
