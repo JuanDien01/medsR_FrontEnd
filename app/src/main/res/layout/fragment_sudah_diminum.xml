@@ -3,12 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SudahDiminumFragment">
+    tools:context=".ui.SemuaFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RcyViewSemua"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/item_obat" />
+
+    <LinearLayout
+        android:id="@+id/noJadwal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="38dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/tidak_ada_jadwal_minum_obat"
+            android:src="@drawable/tidak_ada_obat" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@string/waktunya_bersantai"
+            android:textAlignment="center"
+            android:textColor="@color/primary_main"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@string/tidak_ada_reminder_minum_obat_saat_ini_nikmati_harimu_dengan_tenang"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
 
 </FrameLayout>

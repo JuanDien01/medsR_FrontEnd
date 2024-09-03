@@ -3,13 +3,14 @@ package com.example.aplikasiobat.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikasiobat.R
 import com.example.aplikasiobat.api.response.dashboard.Data
 import com.example.aplikasiobat.databinding.ItemObatBinding
 
-class ObatPasienAdapter(private val obatPasienList: List<Data?>) :
-    RecyclerView.Adapter<ObatPasienAdapter.ObatPasienViewHolder>() {
+class ObatPasienAdapter :
+    ListAdapter<Data, ObatPasienAdapter.ObatPasienViewHolder>(ObatPasienDiffCallback()) {
 
     inner class ObatPasienViewHolder(val binding: ItemObatBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -38,7 +39,7 @@ class ObatPasienAdapter(private val obatPasienList: List<Data?>) :
                     binding.card.strokeColor = ContextCompat.getColor(binding.root.context, R.color.danger_border)
                     binding.iconObat.setImageResource(R.drawable.icon_obat)
                 }
-                null ->{
+                null -> {
                     binding.cardColor.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.neutral10))
                     binding.aturanObat.setBackgroundResource(R.drawable.neutral_rounded_background)
                     binding.aturanObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral100))
@@ -56,8 +57,7 @@ class ObatPasienAdapter(private val obatPasienList: List<Data?>) :
     }
 
     override fun onBindViewHolder(holder: ObatPasienViewHolder, position: Int) {
-        holder.bind(obatPasienList[position]!!)
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int = obatPasienList.size
 }
+

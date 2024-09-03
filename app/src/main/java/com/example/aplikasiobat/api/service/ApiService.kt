@@ -26,4 +26,10 @@ interface ApiService {
 
     @GET("api/obatPasien/getObatPasienById/{idUser}")
     suspend fun getObatPasienById(@Path("idUser") idUser:Int): GetObatPasienResponse
+
+    @GET("api/obatPasien/getObatPasienByIdSudahDiminum/{idUser}")
+    suspend fun getObatPasienByIdSudahDiminum(@Path("idUser") idUser:Int): GetObatPasienResponse
+
+    @GET("api/obatPasien/getObatPasienByIdBelumDiminum/{idUser}")
+    suspend fun getObatPasienByIdBelumDiminum(@Path("idUser") idUser:Int): GetObatPasienResponse
 }

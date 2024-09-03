@@ -1,16 +1,18 @@
 package com.example.aplikasiobat.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.aplikasiobat.R
+import com.example.aplikasiobat.api.response.dashboard.GetObatPasienResponse
 import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
+import com.example.aplikasiobat.api.service.Resource
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentDashboardBinding
 import com.example.aplikasiobat.viewmodel.MainViewModel
@@ -30,75 +32,103 @@ class DashboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val apiHelper = ApiHelper(ApiClient.instance)
         val viewModelFactory = MainViewModelFactory(apiHelper)
-        val now = LocalDateTime.now()
-        val hours = now.hour
-        setTime(hours)
         mainViewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+
+        // Set greeting message based on current time
+        val now = LocalDateTime.now()
+        setTime(now.hour)
+
         return binding.root
     }
 
     private fun setTime(hours: Int) {
-        when (hours) {
-            in 0..6 -> {
-                binding.welcomMsg.text = "Selamat Malam"
-            }
-
-            in 7..12 -> {
-                binding.welcomMsg.text = "Selamat Pagi"
-            }
-
-            in 13..15 -> {
-                binding.welcomMsg.text = "Selamat Siang"
-            }
-            in 16..19 -> {
-                binding.welcomMsg.text = "Selamat Sore"
-            }
-            in 20..23 -> {
-                binding.welcomMsg.text = "Selamat Malam"
-            }
+        binding.welcomMsg.text = when (hours) {
+            in 0..6 -> "Selamat Malam"
+            in 7..12 -> "Selamat Pagi"
+            in 13..15 -> "Selamat Siang"
+            in 16..19 -> "Selamat Sore"
+            else -> "Selamat Malam"
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userId = arguments?.getInt("userId")
-        val fullName = arguments?.getString("Fullname")
+
+        val userId = arguments?.getInt("userId") ?: return
+        val fullName = arguments?.getString("Fullname") ?: "Unknown"
+
         binding.edtFullName.text = fullName
         binding.chipSemua.isChecked = true
-        getObatPasienSemua(userId!!)
-        binding.chipSemua.setOnClickListener {
-            getObatPasienSemua(userId)
-        }
+
+        setupChipListeners(userId)
+        getObatPasienSemua(userId)
+    }
+
+    private fun setupChipListeners(userId: Int) {
+        binding.chipSemua.setOnClickListener { getObatPasienSemua(userId) }
+        binding.chipBelumDiminum.setOnClickListener { getObatPasienBelumDiminum(userId) }
+        binding.chipSudahDiminum.setOnClickListener { getObatPasienSudahDiminum(userId) }
     }
 
     private fun getObatPasienSemua(userId: Int) {
-        mainViewModel.getObatPasien(userId).observe(viewLifecycleOwner) { resource ->
+        fetchData(
+            call = { mainViewModel.getObatPasien(userId) },
+            fragmentClass = SemuaFragment::class.java,
+            dataKey = "obatPasienData"
+        )
+    }
+
+    private fun getObatPasienBelumDiminum(userId: Int) {
+        fetchData(
+            call = { mainViewModel.getObatPasienBelumDiminum(userId) },
+            fragmentClass = BelumDiminumFragment::class.java,
+            dataKey = "obatPasienDataBelumDiminum"
+        )
+    }
+
+    private fun getObatPasienSudahDiminum(userId: Int) {
+        fetchData(
+            call = { mainViewModel.getObatPasienSudahDiminum(userId) },
+            fragmentClass = SudahDiminumFragment::class.java,
+            dataKey = "obatPasienDataSudahDiminum"
+        )
+    }
+
+    private fun fetchData(
+        call: () -> LiveData<Resource<GetObatPasienResponse>>, // Replace with your actual data type
+        fragmentClass: Class<out Fragment>,
+        dataKey: String
+    ) {
+        call().observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     binding.loading.visibility = View.GONE
                     binding.fragmentContainer.visibility = View.VISIBLE
-                    resource.data?.let { obatPasienData ->
-                        val gson = Gson()
-                        val jsonString = gson.toJson(obatPasienData)
+                    resource.data?.let { data ->
                         val bundle = Bundle().apply {
-                            putString("obatPasienData", jsonString)
+                            putString(dataKey, Gson().toJson(data))
                         }
-                        val semuaFragment = SemuaFragment().apply {
+                        val fragment = fragmentClass.newInstance().apply {
                             arguments = bundle
                         }
                         childFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, semuaFragment)
+                            .setCustomAnimations(
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out,
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out
+                            )
+                            .replace(R.id.fragment_container, fragment)
                             .commit()
                     }
                 }
 
                 Status.ERROR -> {
-                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    binding.loading.visibility = View.GONE
                 }
 
                 Status.LOADING -> {
@@ -107,5 +137,10 @@ class DashboardFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

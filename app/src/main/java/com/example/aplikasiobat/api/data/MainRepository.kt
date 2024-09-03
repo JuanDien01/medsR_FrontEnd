@@ -10,4 +10,6 @@ class MainRepository(private val apiHelper: ApiHelper) {
     suspend fun registerUserBiodata(registerUserBiodataRequest: RegisterUserBiodataRequest) = apiHelper.registerUserBiodata(registerUserBiodataRequest)
     suspend fun login(request: LoginRequest) = apiHelper.login(request)
     suspend fun getObatPasien(idUser:Int) = apiHelper.getObatPasien(idUser)
+    suspend fun getObatPasienSudahDiminum(idUser:Int) = apiHelper.getObatPasinSudahDiminum(idUser)
+    suspend fun getObatPasienBelumDiminum(idUser:Int) = apiHelper.getObatPasienBelumDiminum(idUser)
 }

@@ -63,9 +63,11 @@ class SemuaFragment : Fragment() {
     }
 
     private fun initRecyclerView(obatPasienList: List<Data>) {
-        adapter = ObatPasienAdapter(obatPasienList)
+        adapter = ObatPasienAdapter()
         binding.RcyViewSemua.layoutManager = LinearLayoutManager(context)
         binding.RcyViewSemua.adapter = adapter
+        // Submit the list to the adapter
+        adapter.submitList(obatPasienList)
     }
 
     override fun onDestroyView() {
