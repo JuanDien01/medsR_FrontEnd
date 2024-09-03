@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/email"
+                android:id="@+id/welcomMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Welcome" />
@@ -35,6 +35,9 @@
                 android:id="@+id/edtFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 android:text="Juan Sebastian" />
         </LinearLayout>
 
@@ -65,34 +68,36 @@
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
+            app:singleSelection="true"
+            app:selectionRequired="true"
             android:layout_height="wrap_content">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_semua"
-                style="@style/Widget.Material3.Chip.Suggestion"
+                style="@style/Widget.Custom.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Semua"
+                android:text="@string/semua"
                 app:chipCornerRadius="99dp"
-                app:chipStrokeWidth="0.1dp" />
+                app:chipStrokeWidth="0.1dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_belum_diminum"
-                style="@style/Widget.Material3.Chip.Suggestion"
+                style="@style/Widget.Custom.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Belum Diminum"
+                android:text="@string/belum_diminum"
                 app:chipCornerRadius="99dp"
-                app:chipStrokeWidth="0.1dp" />
+                app:chipStrokeWidth="0.1dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_sudah_diminum"
-                style="@style/Widget.Material3.Chip.Suggestion"
+                style="@style/Widget.Custom.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sudah Diminum"
+                android:text="@string/sudah_diminum"
                 app:chipCornerRadius="99dp"
-                app:chipStrokeWidth="0.1dp" />
+                app:chipStrokeWidth="0.1dp"/>
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
@@ -110,7 +115,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_regular"
         android:layout_margin="12dp"
-        android:text="Jadwal Obat Hari Ini"
+        android:text="@string/jadwal_obat_hari_ini"
         android:textSize="12sp"
         app:layout_constraintTop_toBottomOf="@id/linearLayout2"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,6 +132,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
 
     <ProgressBar
         android:id="@+id/loading"

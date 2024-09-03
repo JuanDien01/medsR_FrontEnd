@@ -8,7 +8,7 @@ import com.example.aplikasiobat.R
 import com.example.aplikasiobat.api.response.dashboard.Data
 import com.example.aplikasiobat.databinding.ItemObatBinding
 
-class ObatPasienAdapter(private val obatPasienList: List<Data>) :
+class ObatPasienAdapter(private val obatPasienList: List<Data?>) :
     RecyclerView.Adapter<ObatPasienAdapter.ObatPasienViewHolder>() {
 
     inner class ObatPasienViewHolder(val binding: ItemObatBinding) :
@@ -27,6 +27,7 @@ class ObatPasienAdapter(private val obatPasienList: List<Data>) :
                     binding.namaObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.success_main))
                     binding.dosisObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.success_main))
                     binding.card.strokeColor = ContextCompat.getColor(binding.root.context, R.color.success_border)
+                    binding.iconObat.setImageResource(R.drawable.ic_centang)
                 }
                 "false" -> {
                     binding.cardColor.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.danger_border))
@@ -35,6 +36,7 @@ class ObatPasienAdapter(private val obatPasienList: List<Data>) :
                     binding.namaObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral100))
                     binding.dosisObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral90))
                     binding.card.strokeColor = ContextCompat.getColor(binding.root.context, R.color.danger_border)
+                    binding.iconObat.setImageResource(R.drawable.icon_obat)
                 }
                 null ->{
                     binding.cardColor.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.neutral10))
@@ -42,6 +44,7 @@ class ObatPasienAdapter(private val obatPasienList: List<Data>) :
                     binding.aturanObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral100))
                     binding.namaObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral100))
                     binding.dosisObat.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral90))
+                    binding.iconObat.setImageResource(R.drawable.icon_obat)
                 }
             }
         }
@@ -53,7 +56,7 @@ class ObatPasienAdapter(private val obatPasienList: List<Data>) :
     }
 
     override fun onBindViewHolder(holder: ObatPasienViewHolder, position: Int) {
-        holder.bind(obatPasienList[position])
+        holder.bind(obatPasienList[position]!!)
     }
 
     override fun getItemCount(): Int = obatPasienList.size

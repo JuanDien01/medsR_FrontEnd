@@ -1,11 +1,12 @@
 package com.example.aplikasiobat.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.aplikasiobat.R
 import com.example.aplikasiobat.api.service.ApiClient
@@ -15,11 +16,12 @@ import com.example.aplikasiobat.databinding.FragmentDashboardBinding
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
 import com.google.gson.Gson
+import java.time.LocalDateTime
 
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding?= null
+    private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
@@ -29,11 +31,36 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentDashboardBinding.inflate(inflater,container,false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val apiHelper = ApiHelper(ApiClient.instance)
         val viewModelFactory = MainViewModelFactory(apiHelper)
+        val now = LocalDateTime.now()
+        val hours = now.hour
+        setTime(hours)
         mainViewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         return binding.root
+    }
+
+    private fun setTime(hours: Int) {
+        when (hours) {
+            in 0..6 -> {
+                binding.welcomMsg.text = "Selamat Malam"
+            }
+
+            in 7..12 -> {
+                binding.welcomMsg.text = "Selamat Pagi"
+            }
+
+            in 13..15 -> {
+                binding.welcomMsg.text = "Selamat Siang"
+            }
+            in 16..19 -> {
+                binding.welcomMsg.text = "Selamat Sore"
+            }
+            in 20..23 -> {
+                binding.welcomMsg.text = "Selamat Malam"
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,13 +68,14 @@ class DashboardFragment : Fragment() {
         val userId = arguments?.getInt("userId")
         val fullName = arguments?.getString("Fullname")
         binding.edtFullName.text = fullName
+        binding.chipSemua.isChecked = true
         getObatPasienSemua(userId!!)
         binding.chipSemua.setOnClickListener {
             getObatPasienSemua(userId)
         }
     }
 
-    private fun getObatPasienSemua(userId:Int) {
+    private fun getObatPasienSemua(userId: Int) {
         mainViewModel.getObatPasien(userId).observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -67,9 +95,12 @@ class DashboardFragment : Fragment() {
                             .commit()
                     }
                 }
+
                 Status.ERROR -> {
-                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
+
                 Status.LOADING -> {
                     binding.loading.visibility = View.VISIBLE
                     binding.fragmentContainer.visibility = View.GONE

@@ -46,9 +46,18 @@ class SemuaFragment : Fragment() {
         arguments?.getString("obatPasienData")?.let { jsonString ->
             val gson = Gson()
             val obatPasienData = gson.fromJson(jsonString, GetObatPasienResponse::class.java)
-            initRecyclerView(obatPasienData.data)
 
-            // Use obatPasienData here
+            // Check if the data is not null before initializing the RecyclerView
+            obatPasienData?.data?.let { data ->
+                initRecyclerView(data)
+            } ?: run {
+                // Handle the case where obatPasienData.data is null
+                Log.e("SemuaFragment", "Obat Pasien Data is null or empty")
+                // You can also show a message or image here indicating no data available
+                binding.noJadwal.visibility = View.VISIBLE
+                binding.RcyViewSemua.visibility = View.GONE
+            }
+
             Log.d("dataObatPasien", "Obat Pasien Data: $obatPasienData")
         }
     }

@@ -8,6 +8,13 @@
     <string name="buat_akun">Buat Akun</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tidak_ada_jadwal_minum_obat">Tidak Ada Jadwal Minum Obat</string>
+    <string name="waktunya_bersantai">Waktunya Bersantai</string>
+    <string name="tidak_ada_reminder_minum_obat_saat_ini_nikmati_harimu_dengan_tenang">Tidak ada reminder minum obat saat ini. Nikmati harimu dengan tenang!</string>
+    <string name="jadwal_obat_hari_ini">Jadwal Obat Hari Ini</string>
+    <string name="semua">Semua</string>
+    <string name="belum_diminum">Belum Diminum</string>
+    <string name="sudah_diminum">Sudah Diminum</string>
     <string-array name="gender">
         <item>Laki-Laki</item>
         <item>Perempuan</item>
