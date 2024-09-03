@@ -23,12 +23,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
+            android:layout_marginStart="12dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/welcomMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/neutral80"
+                android:textSize="12sp"
                 android:text="@string/Welcome" />
 
             <TextView
@@ -37,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="16sp"
+                android:textColor="@color/neutral100"
                 android:textStyle="bold"
                 android:text="Juan Sebastian" />
         </LinearLayout>
@@ -44,6 +49,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="12dp"
             android:src="@drawable/icon_setting" />
     </LinearLayout>
 
@@ -56,83 +62,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:selectionRequired="true"
+        app:singleSelection="true">
 
-        <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            android:layout_height="wrap_content">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_semua"
+            style="@style/Widget.Custom.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/semua"
+            app:chipCornerRadius="99dp"
+            app:chipStrokeWidth="0.1dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_semua"
-                style="@style/Widget.Custom.Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/semua"
-                app:chipCornerRadius="99dp"
-                app:chipStrokeWidth="0.1dp"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_belum_diminum"
+            style="@style/Widget.Custom.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/belum_diminum"
+            app:chipCornerRadius="99dp"
+            app:chipStrokeWidth="0.1dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_belum_diminum"
-                style="@style/Widget.Custom.Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/belum_diminum"
-                app:chipCornerRadius="99dp"
-                app:chipStrokeWidth="0.1dp"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_sudah_diminum"
-                style="@style/Widget.Custom.Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sudah_diminum"
-                app:chipCornerRadius="99dp"
-                app:chipStrokeWidth="0.1dp"/>
-        </com.google.android.material.chip.ChipGroup>
-    </LinearLayout>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_sudah_diminum"
+            style="@style/Widget.Custom.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sudah_diminum"
+            app:chipCornerRadius="99dp"
+            app:chipStrokeWidth="0.1dp" />
+    </com.google.android.material.chip.ChipGroup>
 
     <View
         android:id="@+id/view2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="2dp"
+        app:layout_constraintWidth_percent="0.9"
         android:background="@color/neutral40"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_regular"
         android:layout_margin="12dp"
+        android:fontFamily="@font/poppins_regular"
         android:text="@string/jadwal_obat_hari_ini"
+        android:textColor="@color/neutral80"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
-
 
     <ProgressBar
         android:id="@+id/loading"
@@ -142,5 +142,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
