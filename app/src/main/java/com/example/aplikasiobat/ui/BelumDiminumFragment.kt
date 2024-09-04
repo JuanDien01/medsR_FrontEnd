@@ -47,13 +47,14 @@ class BelumDiminumFragment : Fragment() {
 
             // Check if the data is not null before initializing the RecyclerView
             obatPasienData?.data?.let { data ->
-                initRecyclerView(data)
-            } ?: run {
-                // Handle the case where obatPasienData.data is null
-                Log.e("BelumDiminumFragment", "Obat Pasien Data is null or empty")
-                // You can also show a message or image here indicating no data available
-                binding.noJadwal.visibility = View.VISIBLE
-                binding.RcyViewSemua.visibility = View.GONE
+                if (data.isEmpty()) {
+                    binding.noJadwal.visibility = View.VISIBLE
+                    binding.RcyViewSemua.visibility = View.GONE
+                } else {
+                    initRecyclerView(data)
+                    binding.noJadwal.visibility = View.GONE
+                    binding.RcyViewSemua.visibility = View.VISIBLE
+                }
             }
 
             Log.d("dataObatPasien", "Obat Pasien Data: $obatPasienData")

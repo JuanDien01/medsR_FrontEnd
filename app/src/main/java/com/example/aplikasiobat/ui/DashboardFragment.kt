@@ -134,8 +134,8 @@ class DashboardFragment : Fragment() {
                 }
 
                 Status.LOADING -> {
-//                    binding.loading.visibility = View.VISIBLE
-//                    binding.fragmentContainer.visibility = View.GONE
+                    binding.loading.visibility = View.VISIBLE
+                    binding.fragmentContainer.visibility = View.GONE
                 }
             }
         }

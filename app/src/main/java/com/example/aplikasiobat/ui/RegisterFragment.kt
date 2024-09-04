@@ -110,17 +110,13 @@ class RegisterFragment : Fragment() {
                     findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                 }
                 Status.ERROR -> {
-                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
-//                    binding.loading.visibility = View.GONE
-//                    binding.linearLayout5.visibility = View.VISIBLE
-//                    binding.linearLayout6.visibility = View.VISIBLE
-                    Log.d("api", "registerUser: ${resource.message}")
+                    Toast.makeText(context, "Harap Coba Sebentar Lagi!", Toast.LENGTH_SHORT).show()
+                    binding.btnDaftar.isClickable = true
+                    binding.lottieLoading.visibility = View.GONE
                 }
                 Status.LOADING -> {
-                    Toast.makeText(context, "Loading...", Toast.LENGTH_SHORT).show()
-//                    binding.loading.visibility = View.VISIBLE
-//                    binding.linearLayout5.visibility = View.GONE
-//                    binding.linearLayout6.visibility = View.GONE
+                    binding.btnDaftar.isClickable = false
+                    binding.lottieLoading.visibility = View.VISIBLE
                 }
             }
         }

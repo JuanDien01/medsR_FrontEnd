@@ -73,11 +73,14 @@ class LoginFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
-                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error: Username atau Password Salah!", Toast.LENGTH_SHORT).show()
+                    binding.btnLogin.isClickable = true
+                    binding.lottieLoading.visibility = View.GONE
                 }
 
                 Status.LOADING -> {
-                    
+                    binding.btnLogin.isClickable = false
+                    binding.lottieLoading.visibility = View.VISIBLE
                 }
             }
         }
