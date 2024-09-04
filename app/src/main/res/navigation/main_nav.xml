@@ -62,5 +62,13 @@
             android:name="userId"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailReminderFragment"
+            app:destination="@id/detailReminderFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/detailReminderFragment"
+        android:name="com.example.aplikasiobat.ui.DetailReminderFragment"
+        android:label="fragment_detail_reminder"
+        tools:layout="@layout/fragment_detail_reminder" />
 </navigation>

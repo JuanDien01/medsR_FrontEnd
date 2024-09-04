@@ -6,7 +6,7 @@ import com.example.aplikasiobat.api.response.dashboard.Data
 class ObatPasienDiffCallback : DiffUtil.ItemCallback<Data>() {
     override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
         // Compare unique IDs or other unique identifiers
-        return oldItem.namaObat == newItem.namaObat
+        return oldItem.idObatPasien == newItem.idObatPasien
     }
 
     override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {

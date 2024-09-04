@@ -2,13 +2,12 @@ package com.example.aplikasiobat.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.example.aplikasiobat.api.data.MainRepository
+import com.example.aplikasiobat.api.service.repository.MainRepository
 import com.example.aplikasiobat.api.request.LoginRequest
 import com.example.aplikasiobat.api.request.RegisterRequest
 import com.example.aplikasiobat.api.request.RegisterUserBiodataRequest
 import com.example.aplikasiobat.api.service.Resource
 import kotlinx.coroutines.Dispatchers
-import okhttp3.Dispatcher
 
 
 class MainViewModel(private val mainRepository: MainRepository):ViewModel() {

@@ -1,4 +1,4 @@
-package com.example.aplikasiobat.api.data
+package com.example.aplikasiobat.api.service.repository
 
 import com.example.aplikasiobat.api.request.LoginRequest
 import com.example.aplikasiobat.api.request.RegisterRequest

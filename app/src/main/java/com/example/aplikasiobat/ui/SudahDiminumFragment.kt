@@ -68,9 +68,9 @@ class SudahDiminumFragment : Fragment() {
         adapter.submitList(obatPasienList)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
 
 }

@@ -58,7 +58,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val userId = arguments?.getInt("userId") ?: return
-        val fullName = arguments?.getString("Fullname") ?: "Unknown"
+        val fullName = arguments?.getString("Fullname") ?: "Tamu"
 
         binding.edtFullName.text = fullName
         binding.chipSemua.isChecked = true
@@ -98,7 +98,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun fetchData(
-        call: () -> LiveData<Resource<GetObatPasienResponse>>, // Replace with your actual data type
+        call: () -> LiveData<Resource<GetObatPasienResponse>>,
         fragmentClass: Class<out Fragment>,
         dataKey: String
     ) {
@@ -114,6 +114,8 @@ class DashboardFragment : Fragment() {
                         val fragment = fragmentClass.newInstance().apply {
                             arguments = bundle
                         }
+
+                        // Begin the transaction
                         childFragmentManager.beginTransaction()
                             .setCustomAnimations(
                                 android.R.anim.fade_in,
@@ -132,12 +134,14 @@ class DashboardFragment : Fragment() {
                 }
 
                 Status.LOADING -> {
-                    binding.loading.visibility = View.VISIBLE
-                    binding.fragmentContainer.visibility = View.GONE
+//                    binding.loading.visibility = View.VISIBLE
+//                    binding.fragmentContainer.visibility = View.GONE
                 }
             }
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

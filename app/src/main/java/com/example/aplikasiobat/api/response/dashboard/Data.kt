@@ -4,6 +4,12 @@ package com.example.aplikasiobat.api.response.dashboard
 import com.google.gson.annotations.SerializedName
 
 data class Data(
+    @SerializedName("idObatPasien")
+    val idObatPasien:Int,
+    @SerializedName("idObat")
+    val idObat:Int,
+    @SerializedName("idUser")
+    val idUser:Int,
     @SerializedName("dosisObat")
     val dosisObat: String,
     @SerializedName("namaObat")
