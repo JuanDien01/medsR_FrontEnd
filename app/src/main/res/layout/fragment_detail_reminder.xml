@@ -48,8 +48,10 @@
         android:id="@+id/materialCardView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:strokeWidth="0dp"
         android:visibility="gone"
         android:layout_margin="8dp"
+        android:backgroundTint="@color/danger_surface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
@@ -80,7 +82,7 @@
                         android:layout_marginLeft="8dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Waktu Minum Obat Telah Terlewat"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textStyle="bold"
                         android:textColor="@color/danger_main"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -89,8 +91,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp"
                     android:text="Untuk memastikan kesehatan Anda tetap terjaga, mohon segera minum obat sesuai anjuran."
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="@color/neutral80" />
 
             </LinearLayout>
@@ -105,6 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        app:strokeWidth="0dp"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,9 +141,9 @@
                         android:layout_marginLeft="8dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Obat Telah Diminum! Semoga Anda Lekas Sembuh."
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textStyle="bold"
                         android:textColor="@color/success_main"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -153,6 +157,7 @@
         android:id="@+id/card_obat_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:strokeWidth="0.5dp"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -253,6 +258,7 @@
         android:id="@+id/card_detail_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:strokeWidth="0.5dp"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -359,6 +365,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        app:strokeWidth="0.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_detail_reminder">
