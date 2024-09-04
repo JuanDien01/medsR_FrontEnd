@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aplikasiobat.R
+import com.example.aplikasiobat.adapter.ObatPasienAdapter
 import com.example.aplikasiobat.api.response.dashboard.GetObatPasienResponse
 import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
@@ -27,6 +29,9 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var semuaAdapter: ObatPasienAdapter
+    private lateinit var belumDiminumAdapter: ObatPasienAdapter
+    private lateinit var sudahDiminumAdapter: ObatPasienAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,8 +68,22 @@ class DashboardFragment : Fragment() {
         binding.edtFullName.text = fullName
         binding.chipSemua.isChecked = true
 
+        setupRecyclerViews()
         setupChipListeners(userId)
         getObatPasienSemua(userId)
+    }
+
+    private fun setupRecyclerViews() {
+        // Setup adapter for Semua
+        semuaAdapter = ObatPasienAdapter()
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = semuaAdapter
+
+        // Setup adapter for Belum Diminum
+        belumDiminumAdapter = ObatPasienAdapter()
+
+        // Setup adapter for Sudah Diminum
+        sudahDiminumAdapter = ObatPasienAdapter()
     }
 
     private fun setupChipListeners(userId: Int) {
@@ -74,73 +93,94 @@ class DashboardFragment : Fragment() {
     }
 
     private fun getObatPasienSemua(userId: Int) {
-        fetchData(
-            call = { mainViewModel.getObatPasien(userId) },
-            fragmentClass = SemuaFragment::class.java,
-            dataKey = "obatPasienData"
-        )
-    }
-
-    private fun getObatPasienBelumDiminum(userId: Int) {
-        fetchData(
-            call = { mainViewModel.getObatPasienBelumDiminum(userId) },
-            fragmentClass = BelumDiminumFragment::class.java,
-            dataKey = "obatPasienDataBelumDiminum"
-        )
-    }
-
-    private fun getObatPasienSudahDiminum(userId: Int) {
-        fetchData(
-            call = { mainViewModel.getObatPasienSudahDiminum(userId) },
-            fragmentClass = SudahDiminumFragment::class.java,
-            dataKey = "obatPasienDataSudahDiminum"
-        )
-    }
-
-    private fun fetchData(
-        call: () -> LiveData<Resource<GetObatPasienResponse>>,
-        fragmentClass: Class<out Fragment>,
-        dataKey: String
-    ) {
-        call().observe(viewLifecycleOwner) { resource ->
+        mainViewModel.getObatPasien(userId).observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    binding.loading.visibility = View.GONE
-                    binding.fragmentContainer.visibility = View.VISIBLE
-                    resource.data?.let { data ->
-                        val bundle = Bundle().apply {
-                            putString(dataKey, Gson().toJson(data))
-                        }
-                        val fragment = fragmentClass.newInstance().apply {
-                            arguments = bundle
-                        }
-
-                        // Begin the transaction
-                        childFragmentManager.beginTransaction()
-                            .setCustomAnimations(
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out,
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out
-                            )
-                            .replace(R.id.fragment_container, fragment)
-                            .commit()
+                    val data = resource.data?.data
+                    if (data.isNullOrEmpty()) {
+                        binding.recyclerView.visibility = View.GONE
+                        binding.noJadwal.visibility = View.VISIBLE
+                    } else {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        binding.noJadwal.visibility = View.GONE
+                        semuaAdapter.submitList(data)
+                        binding.recyclerView.adapter = semuaAdapter
                     }
+                    binding.loading.visibility = View.GONE
                 }
-
                 Status.ERROR -> {
                     Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                     binding.loading.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
                 }
-
                 Status.LOADING -> {
                     binding.loading.visibility = View.VISIBLE
-                    binding.fragmentContainer.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.noJadwal.visibility = View.GONE
                 }
             }
         }
     }
 
+    private fun getObatPasienBelumDiminum(userId: Int) {
+        mainViewModel.getObatPasienBelumDiminum(userId).observe(viewLifecycleOwner) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    val data = resource.data?.data
+                    if (data.isNullOrEmpty()) {
+                        binding.recyclerView.visibility = View.GONE
+                        binding.noJadwal.visibility = View.VISIBLE
+                    } else {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        binding.noJadwal.visibility = View.GONE
+                        belumDiminumAdapter.submitList(data)
+                        binding.recyclerView.adapter = belumDiminumAdapter
+                    }
+                    binding.loading.visibility = View.GONE
+                }
+                Status.ERROR -> {
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    binding.loading.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
+                }
+                Status.LOADING -> {
+                    binding.loading.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.noJadwal.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun getObatPasienSudahDiminum(userId: Int) {
+        mainViewModel.getObatPasienSudahDiminum(userId).observe(viewLifecycleOwner) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    val data = resource.data?.data
+                    if (data.isNullOrEmpty()) {
+                        binding.recyclerView.visibility = View.GONE
+                        binding.noJadwal.visibility = View.VISIBLE
+                    } else {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        binding.noJadwal.visibility = View.GONE
+                        sudahDiminumAdapter.submitList(data)
+                        binding.recyclerView.adapter = sudahDiminumAdapter
+                    }
+                    binding.loading.visibility = View.GONE
+                }
+                Status.ERROR -> {
+                    Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    binding.loading.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
+                }
+                Status.LOADING -> {
+                    binding.loading.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.noJadwal.visibility = View.GONE
+                }
+            }
+        }
+    }
 
 
     override fun onDestroyView() {
@@ -148,3 +188,4 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 }
+
