@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object ApiClient {
     //base url api
@@ -18,6 +19,10 @@ object ApiClient {
         }
 
     private val client = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS) // Adjust the timeout as necessary
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .addInterceptor(RetryInterceptor(maxRetry = 3))
         .addInterceptor(logging)
         .build()
     val instance: ApiService by lazy {

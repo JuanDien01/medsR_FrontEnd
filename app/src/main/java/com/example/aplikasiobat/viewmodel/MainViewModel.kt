@@ -1,8 +1,11 @@
 package com.example.aplikasiobat.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.example.aplikasiobat.api.service.repository.MainRepository
+import com.example.aplikasiobat.api.repository.MainRepository
+import com.example.aplikasiobat.api.request.DetailObatPasienRequest
 import com.example.aplikasiobat.api.request.LoginRequest
 import com.example.aplikasiobat.api.request.RegisterRequest
 import com.example.aplikasiobat.api.request.RegisterUserBiodataRequest
@@ -59,6 +62,23 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
         emit(Resource.loading(null))
         try {
             emit(Resource.success(data = mainRepository.getObatPasienBelumDiminum(idUser)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
+    fun getObatPasienByUserIdAndObatId(request:DetailObatPasienRequest) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.getObatPasienByUserIdAndObatId(request)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
+
+    fun updateSudahMinum(idObatPasien:Int) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.updateSudahMinum(idObatPasien)))
         }catch(exception:Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }

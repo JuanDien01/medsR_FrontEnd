@@ -70,5 +70,12 @@
         android:id="@+id/detailReminderFragment"
         android:name="com.example.aplikasiobat.ui.DetailReminderFragment"
         android:label="fragment_detail_reminder"
-        tools:layout="@layout/fragment_detail_reminder" />
+        tools:layout="@layout/fragment_detail_reminder" >
+        <argument
+            android:name="dataDetail"
+            app:argType="com.example.aplikasiobat.api.response.dashboard.ObatPasien.Data" />
+        <action
+            android:id="@+id/action_detailReminderFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
 </navigation>

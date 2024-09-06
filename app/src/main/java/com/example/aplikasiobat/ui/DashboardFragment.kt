@@ -6,21 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.aplikasiobat.R
 import com.example.aplikasiobat.adapter.ObatPasienAdapter
-import com.example.aplikasiobat.api.response.dashboard.GetObatPasienResponse
+import com.example.aplikasiobat.api.response.dashboard.ObatPasien.Data
 import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
-import com.example.aplikasiobat.api.service.Resource
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentDashboardBinding
+import com.example.aplikasiobat.viewmodel.DashboardViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
-import com.google.gson.Gson
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 class DashboardFragment : Fragment() {
@@ -29,6 +30,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
+    private val dashboardViewModel: DashboardViewModel by activityViewModels()
     private lateinit var semuaAdapter: ObatPasienAdapter
     private lateinit var belumDiminumAdapter: ObatPasienAdapter
     private lateinit var sudahDiminumAdapter: ObatPasienAdapter
@@ -51,39 +53,60 @@ class DashboardFragment : Fragment() {
 
     private fun setTime(hours: Int) {
         binding.welcomMsg.text = when (hours) {
-            in 0..6 -> "Selamat Malam"
-            in 7..12 -> "Selamat Pagi"
-            in 13..15 -> "Selamat Siang"
-            in 16..19 -> "Selamat Sore"
-            else -> "Selamat Malam"
+            in 0..6 -> "Selamat Malam 🌙"
+            in 7..12 -> "Selamat Pagi ☀️"
+            in 13..15 -> "Selamat Siang 🌞"
+            in 16..19 -> "Selamat Sore 🌅"
+            else -> "Selamat Malam 🌙"
         }
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userId = arguments?.getInt("userId") ?: return
-        val fullName = arguments?.getString("Fullname") ?: "Tamu"
+        dashboardViewModel.userId.observe(viewLifecycleOwner) { userId ->
+            // Ensure that userId is valid before using it
+            if (userId != null) {
+                getObatPasienSemua(userId)
+                setupChipListeners(userId)
+            } else {
+                Toast.makeText(context, "no data after login", Toast.LENGTH_SHORT).show()
+            }
+        }
 
-        binding.edtFullName.text = fullName
+
+        // Observe fullName and update UI
+        dashboardViewModel.fullName.observe(viewLifecycleOwner) { fullName ->
+            binding.edtFullName.text = fullName
+        }
+
+        // Initial chip selection
         binding.chipSemua.isChecked = true
 
         setupRecyclerViews()
-        setupChipListeners(userId)
-        getObatPasienSemua(userId)
     }
 
     private fun setupRecyclerViews() {
-        // Setup adapter for Semua
-        semuaAdapter = ObatPasienAdapter()
+        semuaAdapter = ObatPasienAdapter { obatPasien ->
+            handleItemClick(obatPasien)
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = semuaAdapter
 
-        // Setup adapter for Belum Diminum
-        belumDiminumAdapter = ObatPasienAdapter()
+        belumDiminumAdapter = ObatPasienAdapter { obatPasien ->
+            handleItemClick(obatPasien)
+        }
 
-        // Setup adapter for Sudah Diminum
-        sudahDiminumAdapter = ObatPasienAdapter()
+        sudahDiminumAdapter = ObatPasienAdapter { obatPasien ->
+            handleItemClick(obatPasien)
+        }
+    }
+
+    private fun handleItemClick(obatPasien: Data) {
+        val action =
+            DashboardFragmentDirections.actionDashboardFragmentToDetailReminderFragment(obatPasien)
+        findNavController().navigate(action)
     }
 
     private fun setupChipListeners(userId: Int) {
@@ -96,23 +119,36 @@ class DashboardFragment : Fragment() {
         mainViewModel.getObatPasien(userId).observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
+                    binding.serverTerputus.visibility = View.GONE
                     val data = resource.data?.data
                     if (data.isNullOrEmpty()) {
                         binding.recyclerView.visibility = View.GONE
                         binding.noJadwal.visibility = View.VISIBLE
                     } else {
+                        // Get the current time
+                        val currentTime = LocalTime.now()
+
+                        // Sort the data by the closest waktuMinumObat to the current time
+                        val sortedData = data.sortedBy { item ->
+                            val waktuMinumObat = LocalTime.parse(item.waktuMulaiMinumObat)
+                            Duration.between(currentTime, waktuMinumObat).abs()
+                        }
+
                         binding.recyclerView.visibility = View.VISIBLE
                         binding.noJadwal.visibility = View.GONE
-                        semuaAdapter.submitList(data)
+                        semuaAdapter.submitList(sortedData)
                         binding.recyclerView.adapter = semuaAdapter
                     }
                     binding.loading.visibility = View.GONE
                 }
+
                 Status.ERROR -> {
                     Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                     binding.loading.visibility = View.GONE
                     binding.recyclerView.visibility = View.GONE
+                    binding.serverTerputus.visibility = View.VISIBLE
                 }
+
                 Status.LOADING -> {
                     binding.loading.visibility = View.VISIBLE
                     binding.recyclerView.visibility = View.GONE
@@ -121,6 +157,7 @@ class DashboardFragment : Fragment() {
             }
         }
     }
+
 
     private fun getObatPasienBelumDiminum(userId: Int) {
         mainViewModel.getObatPasienBelumDiminum(userId).observe(viewLifecycleOwner) { resource ->
@@ -138,11 +175,14 @@ class DashboardFragment : Fragment() {
                     }
                     binding.loading.visibility = View.GONE
                 }
+
                 Status.ERROR -> {
                     Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                     binding.loading.visibility = View.GONE
                     binding.recyclerView.visibility = View.GONE
+                    binding.serverTerputus.visibility = View.VISIBLE
                 }
+
                 Status.LOADING -> {
                     binding.loading.visibility = View.VISIBLE
                     binding.recyclerView.visibility = View.GONE
@@ -168,11 +208,14 @@ class DashboardFragment : Fragment() {
                     }
                     binding.loading.visibility = View.GONE
                 }
+
                 Status.ERROR -> {
                     Toast.makeText(context, "Error: ${resource.message}", Toast.LENGTH_SHORT).show()
                     binding.loading.visibility = View.GONE
                     binding.recyclerView.visibility = View.GONE
+                    binding.serverTerputus.visibility = View.VISIBLE
                 }
+
                 Status.LOADING -> {
                     binding.loading.visibility = View.VISIBLE
                     binding.recyclerView.visibility = View.GONE
@@ -183,9 +226,9 @@ class DashboardFragment : Fragment() {
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
 }
 

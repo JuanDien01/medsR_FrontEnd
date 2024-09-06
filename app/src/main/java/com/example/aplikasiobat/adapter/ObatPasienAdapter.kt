@@ -6,19 +6,31 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplikasiobat.R
-import com.example.aplikasiobat.api.response.dashboard.Data
+import com.example.aplikasiobat.api.response.dashboard.ObatPasien.Data
 import com.example.aplikasiobat.databinding.ItemObatBinding
 
-class ObatPasienAdapter :
-    ListAdapter<Data, ObatPasienAdapter.ObatPasienViewHolder>(ObatPasienDiffCallback()) {
+class ObatPasienAdapter(
+    private val onItemClick: (Data) -> Unit
+) : ListAdapter<Data, ObatPasienAdapter.ObatPasienViewHolder>(ObatPasienDiffCallback()) {
 
     inner class ObatPasienViewHolder(val binding: ItemObatBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            // Set the click listener on the root view of the item
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    onItemClick(item)
+                }
+            }
+        }
+
         fun bind(obatPasienItem: Data) {
             binding.namaObat.text = obatPasienItem.namaObat
             binding.dosisObat.text = obatPasienItem.dosisObat
-            binding.aturanObat.text = obatPasienItem.waktuMinumObat
+            binding.aturanObat.text = obatPasienItem.waktuMulaiMinumObat
 
             when (obatPasienItem.sudahMinumObat) {
                 "true" -> {
@@ -60,4 +72,5 @@ class ObatPasienAdapter :
         holder.bind(getItem(position))
     }
 }
+
 

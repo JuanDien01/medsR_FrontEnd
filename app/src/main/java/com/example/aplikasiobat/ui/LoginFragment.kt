@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentLoginBinding
+import com.example.aplikasiobat.viewmodel.DashboardViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
 
@@ -26,6 +28,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
+    private val dashboardViewModel: DashboardViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,11 +68,10 @@ class LoginFragment : Fragment() {
             when (resource.status) {
                 Status.SUCCESS -> {
                     Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                    Log.d("api", "registerUser: ${resource.data}")
-                    val bundle = Bundle()
-                    bundle.putInt("userId", resource.data?.data?.userId!!)
-                    bundle.putString("Fullname", resource.data.data.fullName)
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment,bundle)
+                    val userId = resource.data?.data?.userId ?: 0
+                    val fullName = resource.data?.data?.fullName ?: "Tamu"
+                    dashboardViewModel.setUserData(userId, fullName)
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
                 }
 
                 Status.ERROR -> {
