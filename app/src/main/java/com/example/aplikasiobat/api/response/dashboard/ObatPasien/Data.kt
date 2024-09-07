@@ -21,6 +21,10 @@ data class Data(
     val aturanPenggunaanObat: String,
     @SerializedName("waktuMulaiMinumObat")
     val waktuMulaiMinumObat: String,
+    @SerializedName("durasi")
+    val durasi: String,
+    @SerializedName("frekuensi")
+    val frekuensi: String,
     @SerializedName("waktuSelesaiMinumObat")
     val waktuSelesaiMinumObat: String,
     @SerializedName("tanggalDiberikan")

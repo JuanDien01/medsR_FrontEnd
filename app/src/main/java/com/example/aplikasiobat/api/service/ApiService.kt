@@ -39,6 +39,6 @@ interface ApiService {
     @POST("api/obatPasien/getObatPasienByUserIdAndObatId")
     suspend fun getObatPasienByUserIdAndObatId(@Body request: DetailObatPasienRequest): DetailObatPasienResponse
 
-    @PUT("api/obatPasien/updateSudahMinum/{idObatPasien}")
-    suspend fun updateSudahMinum(@Path("idObatPasien") idObatPasien: Int): UpdateSudahMinumResponse
+    @PUT("api/obatPasien/updateSudahMinum/{idObatPasien}/{status}")
+    suspend fun updateSudahMinum(@Path("idObatPasien") idObatPasien: Int, @Path("status") status: String): UpdateSudahMinumResponse
 }

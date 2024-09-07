@@ -75,10 +75,10 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
         }
     }
 
-    fun updateSudahMinum(idObatPasien:Int) = liveData(Dispatchers.IO){
+    fun updateSudahMinum(idObatPasien:Int,status:String) = liveData(Dispatchers.IO){
         emit(Resource.loading(null))
         try {
-            emit(Resource.success(data = mainRepository.updateSudahMinum(idObatPasien)))
+            emit(Resource.success(data = mainRepository.updateSudahMinum(idObatPasien,status)))
         }catch(exception:Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }

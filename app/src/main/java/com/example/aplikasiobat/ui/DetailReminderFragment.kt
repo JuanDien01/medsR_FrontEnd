@@ -129,7 +129,7 @@ class DetailReminderFragment : Fragment() {
     }
 
     private fun updateSudahMinum(idObatPasien: Int) {
-        mainViewModel.updateSudahMinum(idObatPasien).observe(viewLifecycleOwner) { resource ->
+        mainViewModel.updateSudahMinum(idObatPasien,"true").observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     Toast.makeText(context, "Semoga Lekas Sembuh !", Toast.LENGTH_SHORT).show()

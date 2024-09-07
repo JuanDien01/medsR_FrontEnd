@@ -36,14 +36,14 @@ class MainActivity : AppCompatActivity() {
 
         // Check and request POST_NOTIFICATIONS permission if needed
         requestNotificationPermission()
-        startService()
+//        startService()
     }
 
-    private fun startService(){
-        // Start the notification service
-        val intent = Intent(this, NotificationService::class.java)
-        startForegroundService(intent)
-    }
+//    private fun startService(){
+//        // Start the notification service
+//        val intent = Intent(this, NotificationService::class.java)
+//        startForegroundService(intent)
+//    }
 
     private fun requestNotificationPermission() {
         // Android 13 and above

@@ -1,5 +1,6 @@
 package com.example.aplikasiobat.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentLoginBinding
+import com.example.aplikasiobat.services.NotificationService
 import com.example.aplikasiobat.viewmodel.DashboardViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
@@ -71,6 +73,13 @@ class LoginFragment : Fragment() {
                     val userId = resource.data?.data?.userId ?: 0
                     val fullName = resource.data?.data?.fullName ?: "Tamu"
                     dashboardViewModel.setUserData(userId, fullName)
+                    // Start foreground service after successful login
+                    val intent = Intent(requireContext(), NotificationService::class.java).apply {
+                        putExtra("userId", userId)
+                        putExtra("fullName", fullName)
+                    }
+                    requireContext().startService(intent)
+
                     findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
                 }
 

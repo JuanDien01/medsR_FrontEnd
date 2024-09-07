@@ -13,6 +13,6 @@ class ApiHelper(private val apiService: ApiService) {
     suspend fun getObatPasinSudahDiminum(idUser:Int)= apiService.getObatPasienByIdSudahDiminum(idUser)
     suspend fun getObatPasienBelumDiminum(idUser:Int)= apiService.getObatPasienByIdBelumDiminum(idUser)
     suspend fun getDetailObatPasien(request:DetailObatPasienRequest)= apiService.getObatPasienByUserIdAndObatId(request)
-    suspend fun updateSudahMinum(idObatPasien:Int)= apiService.updateSudahMinum(idObatPasien)
+    suspend fun updateSudahMinum(idObatPasien:Int,status:String)= apiService.updateSudahMinum(idObatPasien,status)
 
 }

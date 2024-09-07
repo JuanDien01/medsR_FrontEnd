@@ -14,6 +14,5 @@ class MainRepository(private val apiHelper: ApiHelper) {
     suspend fun getObatPasienSudahDiminum(idUser:Int) = apiHelper.getObatPasinSudahDiminum(idUser)
     suspend fun getObatPasienBelumDiminum(idUser:Int) = apiHelper.getObatPasienBelumDiminum(idUser)
     suspend fun getObatPasienByUserIdAndObatId(request:DetailObatPasienRequest) = apiHelper.getDetailObatPasien(request)
-    suspend fun updateSudahMinum(idObatPasien:Int) = apiHelper.updateSudahMinum(idObatPasien)
-
+    suspend fun updateSudahMinum(idObatPasien:Int,status:String) = apiHelper.updateSudahMinum(idObatPasien,status)
 }

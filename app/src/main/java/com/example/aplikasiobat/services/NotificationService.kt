@@ -1,73 +1,180 @@
 package com.example.aplikasiobat.services
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.example.aplikasiobat.R
+import com.example.aplikasiobat.api.repository.MainRepository
+import com.example.aplikasiobat.api.service.ApiClient
+import com.example.aplikasiobat.api.service.ApiHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class NotificationService : Service() {
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
-    private val interval: Long = 100000 // 10 seconds
+    private val interval: Long = 100000 // 1 min, adjust as needed
+    private lateinit var mainRepository: MainRepository
 
-    override fun onBind(intent: Intent?): IBinder? {
-        // Not bound
-        return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-
-        // Create a notification channel (for Android 8.0 and above)
-        createNotificationChannel()
-
-        // Start the service in the foreground
-        val notification = createNotification("Service Started")
-        startForeground(1, notification)
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val userId = intent?.getIntExtra("userId", 0) ?: 0
 
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
-                // Show the notification every 10 seconds
-                showNotification("This is your periodic notification.")
+                fetchObatPasien(userId)
                 handler.postDelayed(this, interval)
             }
         }
-        handler.post(runnable) // Start the handler
+        handler.post(runnable)
+
+        return START_STICKY
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannel()
+        val notification = createNotification("Jadwal Minum Obat Kamu Sedang DiCek Ya \uD83D\uDE42")
+        startForeground(1, notification)
+
+        val apiHelper = ApiHelper(ApiClient.instance)
+        mainRepository = MainRepository(apiHelper)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(runnable) // Stop the handler when the service is destroyed
+        handler.removeCallbacks(runnable)
     }
 
-    // Create and show a notification
-    private fun showNotification(message: String) {
-        val notification = createNotification(message)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
+    private fun parseTime(timeString: String): Calendar {
+        val calendar = Calendar.getInstance()
+        val timeParts = timeString.split(":")
+        calendar.set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+        calendar.set(Calendar.MINUTE, timeParts[1].toInt())
+        return calendar
     }
 
-    // Create the notification
+    private fun canScheduleExactAlarms(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.canScheduleExactAlarms()
+        } else {
+            true
+        }
+    }
+
+    private fun requestExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!canScheduleExactAlarms()) {
+                val intent = Intent(
+                    Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                    Uri.parse("package:${packageName}")
+                ).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                startActivity(intent)
+            }
+        }
+    }
+
+
+
+    private fun scheduleNotification(notificationId: Int, message: String, startTime: String, endTime: String, userId: Int, idObatPasien: Int) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Intent to show the notification at start time
+        val notificationIntent = Intent(this, NotificationReceiver::class.java).apply {
+            putExtra("notificationId", notificationId)
+            putExtra("message", message)
+            putExtra("userId", userId) // Pass userId
+        }
+
+        val showPendingIntent = PendingIntent.getBroadcast(
+            this,
+            notificationId,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Intent to cancel the notification at end time
+        val cancelIntent = Intent(this, CancelNotificationReceiver::class.java).apply {
+            putExtra("notificationId", notificationId)
+            putExtra("idObatPasien", idObatPasien) // Pass userId for the API call
+        }
+
+        val cancelPendingIntent = PendingIntent.getBroadcast(
+            this,
+            notificationId + 1,  // Different request code
+            cancelIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val startCalendar = parseTime(startTime)
+        val endCalendar = parseTime(endTime)
+
+        // Schedule the notification to appear at start time
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, startCalendar.timeInMillis, showPendingIntent)
+
+        // Schedule the cancel action at end time
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, endCalendar.timeInMillis, cancelPendingIntent)
+    }
+
+
+
+    private fun fetchObatPasien(userId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = mainRepository.getObatPasien(userId)
+                val obatData = response.data
+                obatData.forEach { data ->
+                    // Only schedule a notification if sudahMinumObat is null (i.e., not "false" or "true")
+                    if (data.sudahMinumObat == null) {
+                        scheduleNotification(data.idObatPasien, data.namaObat, data.waktuMulaiMinumObat, data.waktuSelesaiMinumObat, data.idUser,data.idObatPasien)
+                    } else {
+                        Log.d("NotificationService", "No notification for ${data.namaObat}, sudah_minum is ${data.sudahMinumObat}")
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.e("Service", "Exception during fetch: ${e.message}")
+            }
+        }
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
+
     private fun createNotification(message: String): Notification {
-        val notificationBuilder = NotificationCompat.Builder(this, "CHANNEL_ID")
-            .setSmallIcon(R.drawable.logo) // Your notification icon
-            .setContentTitle("Periodic Notification")
+        return NotificationCompat.Builder(this, "CHANNEL_ID")
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("MedsR Sedang Melakukan Magicnya \uD83E\uDE84")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-        return notificationBuilder.build()
+            .build()
     }
 
-    // Create notification channel for Android 8.0+
     private fun createNotificationChannel() {
         val name = "Notification Service Channel"
         val descriptionText = "Channel for background notifications"
@@ -80,3 +187,6 @@ class NotificationService : Service() {
         notificationManager.createNotificationChannel(channel)
     }
 }
+
+
+
