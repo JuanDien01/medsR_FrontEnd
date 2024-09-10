@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.aplikasiobat.R
 import com.example.aplikasiobat.adapter.ObatPasienAdapter
 import com.example.aplikasiobat.api.response.dashboard.ObatPasien.Data
 import com.example.aplikasiobat.api.service.ApiClient
@@ -75,7 +77,6 @@ class DashboardFragment : Fragment() {
             }
         }
 
-
         // Observe fullName and update UI
         dashboardViewModel.fullName.observe(viewLifecycleOwner) { fullName ->
             binding.edtFullName.text = fullName
@@ -85,6 +86,9 @@ class DashboardFragment : Fragment() {
         binding.chipSemua.isChecked = true
 
         setupRecyclerViews()
+        binding.ivSettings.setOnClickListener {
+            it.findNavController().navigate(R.id.action_dashboardFragment_to_settingsFragment)
+        }
     }
 
     private fun setupRecyclerViews() {

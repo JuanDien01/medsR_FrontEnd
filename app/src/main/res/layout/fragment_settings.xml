@@ -76,7 +76,6 @@
             android:textSize="12sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtNamaPenggunaSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -86,6 +85,7 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtNamaPenggunaSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nama Lengkap" />
@@ -102,7 +102,6 @@
             android:textSize="12sp"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtUsernameSettigs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -112,6 +111,7 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtUsernameSettigs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Username" />
@@ -129,7 +129,6 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtNoTelponSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -139,6 +138,7 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtNoTelponSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nomor Telepon"
@@ -156,7 +156,6 @@
             android:textSize="12sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtEmailSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -166,6 +165,7 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtEmailSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email" />
@@ -183,7 +183,6 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtTanggalSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -198,12 +197,10 @@
                 android:id="@+id/edtTanggalInputSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 android:hint="Tanggal Lahir"
                 android:inputType="none" />
-
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -216,8 +213,6 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtJenisKelaminSettings"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -226,12 +221,12 @@
             app:boxCornerRadiusTopStart="10dp"
             app:hintEnabled="false">
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtJenisKelaminSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Pilih Jenis Kelamin"
-                android:inputType="none"
-                app:simpleItems="@array/gender" />
+                android:enabled="false"
+                android:hint="Jenis Kelamin" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -246,7 +241,6 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edtAlamatSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxCornerRadiusBottomEnd="10dp"
@@ -256,6 +250,7 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtAlamatSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Alamat" />

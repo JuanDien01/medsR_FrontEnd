@@ -7,6 +7,7 @@ import com.example.aplikasiobat.api.request.RegisterRequest
 import com.example.aplikasiobat.api.request.RegisterUserBiodataRequest
 import com.example.aplikasiobat.api.response.dashboard.ObatPasien.GetObatPasienResponse
 import com.example.aplikasiobat.api.response.dashboard.detailObatPasien.DetailObatPasienResponse
+import com.example.aplikasiobat.api.response.dashboard.setting.GetUserBiodataByIdResponse
 import com.example.aplikasiobat.api.response.dashboard.sudahMinum.UpdateSudahMinumResponse
 import com.example.aplikasiobat.api.response.login.LoginResponse
 import com.example.aplikasiobat.api.response.register.user.RegisterResponse
@@ -41,4 +42,7 @@ interface ApiService {
 
     @PUT("api/obatPasien/updateSudahMinum/{idObatPasien}/{status}")
     suspend fun updateSudahMinum(@Path("idObatPasien") idObatPasien: Int, @Path("status") status: String): UpdateSudahMinumResponse
+
+    @GET("api/userBiodata/getUserBiodataById/{idPengguna}")
+    suspend fun getUserBiodataById(@Path("idPengguna") idPengguna : Int) : GetUserBiodataByIdResponse
 }

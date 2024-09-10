@@ -17,16 +17,20 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val _fullName = MutableLiveData<String>()
     val fullName: LiveData<String> get() = _fullName
 
+    private val _idPengguna = MutableLiveData<Int>()
+    val idPengguna: LiveData<Int> get() = _idPengguna
+
     init {
         // Load saved data from SharedPreferences when ViewModel is initialized
         _userId.value = sharedPreferences.getInt("userId", 0) // Default to 0 if not found
         _fullName.value = sharedPreferences.getString("fullName", "Tamu") // Default to "Tamu" if not found
     }
 
-    fun setUserData(id: Int, name: String) {
+    fun setUserData(id: Int, name: String, idPengguna : Int) {
         // Save the data in ViewModel LiveData
         _userId.value = id
         _fullName.value = name
+        _idPengguna.value = idPengguna
 
         // Store the data in SharedPreferences
         sharedPreferences.edit().apply {

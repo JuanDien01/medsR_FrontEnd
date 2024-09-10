@@ -72,7 +72,8 @@ class LoginFragment : Fragment() {
                     Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
                     val userId = resource.data?.data?.userId ?: 0
                     val fullName = resource.data?.data?.fullName ?: "Tamu"
-                    dashboardViewModel.setUserData(userId, fullName)
+                    val idPengguna = resource.data?.data?.idPengguna ?: 0
+                    dashboardViewModel.setUserData(userId, fullName, idPengguna)
                     // Start foreground service after successful login
                     val intent = Intent(requireContext(), NotificationService::class.java).apply {
                         putExtra("userId", userId)

@@ -74,6 +74,14 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }
     }
+    fun getUserBiodataById(idPengguna: Int) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.getUserBiodataById(idPengguna)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
 
     fun updateSudahMinum(idObatPasien:Int,status:String) = liveData(Dispatchers.IO){
         emit(Resource.loading(null))

@@ -65,6 +65,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_detailReminderFragment"
             app:destination="@id/detailReminderFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailReminderFragment"
@@ -78,4 +81,9 @@
             android:id="@+id/action_detailReminderFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.aplikasiobat.ui.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
