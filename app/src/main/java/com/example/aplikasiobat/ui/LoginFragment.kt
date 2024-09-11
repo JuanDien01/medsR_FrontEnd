@@ -1,5 +1,6 @@
 package com.example.aplikasiobat.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -74,6 +75,7 @@ class LoginFragment : Fragment() {
                     val fullName = resource.data?.data?.fullName ?: "Tamu"
                     val idPengguna = resource.data?.data?.idPengguna ?: 0
                     dashboardViewModel.setUserData(userId, fullName, idPengguna)
+
                     // Start foreground service after successful login
                     val intent = Intent(requireContext(), NotificationService::class.java).apply {
                         putExtra("userId", userId)
@@ -97,4 +99,5 @@ class LoginFragment : Fragment() {
             }
         }
     }
+
 }

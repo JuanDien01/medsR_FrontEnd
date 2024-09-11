@@ -15,6 +15,10 @@
     <string name="semua">Semua</string>
     <string name="belum_diminum">Belum Diminum</string>
     <string name="sudah_diminum">Sudah Diminum</string>
+    <string name="apakah_anda_yakin_ingin_keluar_dari_akun_anda_klik_keluar_untuk_melanjutkan_atau_batal_untuk_tetap_masuk">Apakah Anda yakin ingin keluar dari akun Anda? Klik \'Keluar\' untuk melanjutkan atau \'Batal\' untuk tetap masuk.</string>
+    <string name="konfirmasi_keluar">Konfirmasi Keluar</string>
+    <string name="batal">Batal</string>
+    <string name="keluar">Keluar</string>
     <string-array name="gender">
         <item>Laki-Laki</item>
         <item>Perempuan</item>

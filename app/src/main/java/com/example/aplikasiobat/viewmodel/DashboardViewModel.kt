@@ -23,7 +23,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         // Load saved data from SharedPreferences when ViewModel is initialized
         _userId.value = sharedPreferences.getInt("userId", 0) // Default to 0 if not found
-        _fullName.value = sharedPreferences.getString("fullName", "Tamu") // Default to "Tamu" if not found
+        _fullName.value = sharedPreferences.getString("fullName", "Tamu")
+        _idPengguna.value = sharedPreferences.getInt("idPengguna", 0)// Default to "Tamu" if not found
     }
 
     fun setUserData(id: Int, name: String, idPengguna : Int) {
@@ -36,7 +37,28 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         sharedPreferences.edit().apply {
             putInt("userId", id)
             putString("fullName", name)
+            putInt("idPengguna", idPengguna)
             apply() // Apply changes asynchronously
         }
     }
+
+    fun isUserLoggedIn(): Boolean {
+        // Check if user data exists in SharedPreferences
+        return _userId.value != 0
+    }
+
+    fun clearUserData() {
+        // Clear user data from SharedPreferences
+        sharedPreferences.edit().apply {
+            remove("userId")
+            remove("fullName")
+            remove("idPengguna")
+            apply() // Apply changes asynchronously
+        }
+        // Clear LiveData
+        _userId.value = 0
+        _fullName.value = "Tamu"
+        _idPengguna.value = 0
+    }
+
 }

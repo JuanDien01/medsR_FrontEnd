@@ -11,11 +11,14 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -33,7 +36,7 @@ class NotificationService : Service() {
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
-    private val interval: Long = 100000 // 1 min, adjust as needed
+    private val interval: Long = 10000 // 1 min, adjust as needed
     private lateinit var mainRepository: MainRepository
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -105,8 +108,8 @@ class NotificationService : Service() {
         // Intent to show the notification at start time
         val notificationIntent = Intent(this, NotificationReceiver::class.java).apply {
             putExtra("notificationId", notificationId)
-            putExtra("message", message)
-            putExtra("userId", userId) // Pass userId
+            putExtra("message", "Hai! Jangan Lupa Minum Obat $message sesuai jadwal hari ini. Tetap sehat dan semangat ya!")
+            putExtra("userId", userId)
         }
 
         val showPendingIntent = PendingIntent.getBroadcast(
@@ -116,28 +119,19 @@ class NotificationService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Intent to cancel the notification at end time
-        val cancelIntent = Intent(this, CancelNotificationReceiver::class.java).apply {
-            putExtra("notificationId", notificationId)
-            putExtra("idObatPasien", idObatPasien) // Pass userId for the API call
-        }
-
-        val cancelPendingIntent = PendingIntent.getBroadcast(
-            this,
-            notificationId + 1,  // Different request code
-            cancelIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
         val startCalendar = parseTime(startTime)
-        val endCalendar = parseTime(endTime)
+
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(
+            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            "MedsR::NotificationWakeLock"
+        )
+        wakeLock.acquire(5000) // Acquire the wake lock for 5 seconds
 
         // Schedule the notification to appear at start time
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, startCalendar.timeInMillis, showPendingIntent)
-
-        // Schedule the cancel action at end time
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, endCalendar.timeInMillis, cancelPendingIntent)
     }
+
 
 
 
@@ -166,26 +160,43 @@ class NotificationService : Service() {
     }
 
     private fun createNotification(message: String): Notification {
+        // Set a custom sound (can be default alarm sound or custom sound)
+        val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+
+        // Define a vibration pattern
+        val vibrationPattern = longArrayOf(0, 1000, 500, 1000)
+
         return NotificationCompat.Builder(this, "CHANNEL_ID")
             .setSmallIcon(R.drawable.logo)
             .setContentTitle("MedsR Sedang Melakukan Magicnya \uD83E\uDE84")
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_MAX) // Set highest priority
+            .setCategory(NotificationCompat.CATEGORY_ALARM) // Set category to alarm
+            .setSound(alarmSound) // Set the alarm sound
+            .setVibrate(vibrationPattern) // Set vibration pattern
             .setAutoCancel(true)
             .build()
     }
 
+
     private fun createNotificationChannel() {
         val name = "Notification Service Channel"
         val descriptionText = "Channel for background notifications"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_HIGH // Set to high importance for alarm-like behavior
         val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
             description = descriptionText
+            enableVibration(true) // Enable vibration
+            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+            ) // Set the default alarm sound
         }
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
 }
 
 

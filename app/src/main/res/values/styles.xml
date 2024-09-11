@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary and Secondary colors -->
+        <item name="colorPrimary">@color/neutral30</item>
+        <item name="colorPrimaryVariant">@color/primary_main</item>
+        <item name="colorSecondary">@color/danger_main</item>
+
+        <!-- Customize other UI colors as needed -->
+        <item name="android:statusBarColor">@color/neutral40</item>
+        <item name="android:navigationBarColor">@color/neutral70</item>
+    </style>
     <style name="Widget.Custom.Chip" parent="Widget.Material3.Chip.Suggestion">
         <item name="chipBackgroundColor">@color/chip_background_selector</item>
         <item name="android:textColor">@color/chip_text_selector</item>

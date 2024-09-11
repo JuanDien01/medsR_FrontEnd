@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aplikasiobat.R
 import com.example.aplikasiobat.adapter.JamMinumObatAdapter
@@ -47,6 +50,20 @@ class DetailReminderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Find the Toolbar
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+
+        // Set the Toolbar as the support action bar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Set the custom title
+        (activity as AppCompatActivity).supportActionBar?.title = "Detail Reminder"
+
+        // Enable back button
+        val navController = findNavController()
+        toolbar.setupWithNavController(navController)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val obatPasien = args.dataDetail
         if (obatPasien.sudahMinumObat == "true") {

@@ -15,7 +15,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notification = NotificationCompat.Builder(context, "CHANNEL_ID")
             .setSmallIcon(R.drawable.logo)
-            .setContentTitle("Medication Reminder")
+            .setContentTitle("Waktunya Minum Obat! \uD83D\uDC8A")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)

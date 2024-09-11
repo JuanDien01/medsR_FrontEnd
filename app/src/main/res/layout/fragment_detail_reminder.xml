@@ -6,34 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".ui.DetailReminderFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayout11"
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/linearLayout11"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_margin="12dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--        <ImageView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            android:src="@drawable/ic_arrow_left" />-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:fontFamily="@font/poppins_regular"-->
+    <!--            android:text="Detail Reminder"-->
+    <!--            android:textColor="@color/neutral100"-->
+    <!--            android:textSize="16sp"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    </LinearLayout>-->
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="12dp"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_arrow_left" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Detail Reminder"
-            android:textColor="@color/neutral100"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+         />
 
     <View
         android:id="@+id/view3"
@@ -42,19 +53,20 @@
         android:background="@color/neutral40"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout11" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/telatMinum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:strokeWidth="0dp"
-        android:visibility="gone"
         android:layout_margin="8dp"
         android:backgroundTint="@color/danger_surface"
+        android:paddingTop="?attr/actionBarSize"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,9 +94,9 @@
                         android:layout_marginLeft="8dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Waktu Minum Obat Telah Terlewat"
-                        android:textStyle="bold"
                         android:textColor="@color/danger_main"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -92,9 +104,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="12sp"
                     android:text="Untuk memastikan kesehatan Anda tetap terjaga, mohon segera minum obat sesuai anjuran."
-                    android:textColor="@color/neutral80" />
+                    android:textColor="@color/neutral80"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -107,12 +119,12 @@
         android:id="@+id/sudahMinum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:strokeWidth="0dp"
         android:layout_margin="8dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/telatMinum">
+        app:layout_constraintTop_toBottomOf="@+id/telatMinum"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -141,9 +153,9 @@
                         android:layout_marginLeft="8dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Obat Telah Diminum! Semoga Anda Lekas Sembuh."
-                        android:textStyle="bold"
                         android:textColor="@color/success_main"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -157,11 +169,11 @@
         android:id="@+id/card_obat_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:strokeWidth="0.5dp"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sudahMinum">
+        app:layout_constraintTop_toBottomOf="@+id/sudahMinum"
+        app:strokeWidth="0.5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -235,11 +247,11 @@
         android:id="@+id/card_detail_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:strokeWidth="0.5dp"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_obat_reminder">
+        app:layout_constraintTop_toBottomOf="@+id/card_obat_reminder"
+        app:strokeWidth="0.5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -264,9 +276,9 @@
                     android:id="@+id/tv_dosis_obat_detail_reminder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
                     android:fontFamily="@font/poppins_regular"
                     android:text="1 tablet"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/neutral100"
                     android:textSize="14sp" />
 
@@ -295,9 +307,9 @@
                     android:id="@+id/tv_aturan_penggunaan_obat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
                     android:fontFamily="@font/poppins_regular"
                     android:text="2x sehari"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/neutral100"
                     android:textSize="14sp" />
 
@@ -326,9 +338,9 @@
                     android:id="@+id/tv_tanggal_pemberian_obat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
                     android:fontFamily="@font/poppins_regular"
                     android:text="20 September 2024"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/neutral100"
                     android:textSize="14sp" />
 
@@ -342,10 +354,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:strokeWidth="0.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_detail_reminder">
+        app:layout_constraintTop_toBottomOf="@+id/card_detail_reminder"
+        app:strokeWidth="0.5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -420,8 +432,6 @@
             tools:layout_editor_absoluteY="607dp" />
 
     </com.google.android.material.card.MaterialCardView>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

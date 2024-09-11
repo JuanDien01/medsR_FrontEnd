@@ -6,44 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.SettingsFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayout11"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:orientation="horizontal"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_iconArrowLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/ic_arrow_left" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Pengaturan Akun"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/neutral100"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_iconEllipsis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="170dp"
-            android:src="@drawable/ic_ellipsis"/>
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppTheme"/>
 
     <View
         android:id="@+id/view3"
@@ -52,16 +23,16 @@
         android:background="@color/neutral40"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout11" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <LinearLayout
         android:id="@+id/linearlayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginStart="28dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="28dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3">
@@ -99,7 +70,7 @@
             android:fontFamily="@font/poppins_regular"
             android:text="Username"
             android:textColor="@color/neutral80"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -114,6 +85,7 @@
                 android:id="@+id/edtUsernameSettigs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:hint="Username" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -265,7 +237,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:text="Simpan"
                 android:textColor="@color/neutral10"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

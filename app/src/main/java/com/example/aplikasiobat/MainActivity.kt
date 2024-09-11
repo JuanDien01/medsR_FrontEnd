@@ -1,21 +1,30 @@
 package com.example.aplikasiobat
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.example.aplikasiobat.services.NotificationService
+import com.example.aplikasiobat.viewmodel.DashboardViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var requestLauncher: ActivityResultLauncher<String>
+
+    private val dashboardViewModel by lazy {
+        ViewModelProvider(this)[DashboardViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
+
 
         requestLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -34,16 +44,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Check and request POST_NOTIFICATIONS permission if needed
         requestNotificationPermission()
-//        startService()
+
+        // Navigate based on user login status
+        if (dashboardViewModel.isUserLoggedIn()) {
+            // Navigate to DashboardFragment if user is already logged in
+            navController.navigate(R.id.dashboardFragment)
+//            dashboardViewModel.clearUserData()
+        } else {
+            // Show WelcomeFragment if user is not logged in
+            navController.navigate(R.id.welcomeFragment)
+        }
     }
 
-//    private fun startService(){
-//        // Start the notification service
-//        val intent = Intent(this, NotificationService::class.java)
-//        startForegroundService(intent)
-//    }
+
 
     private fun requestNotificationPermission() {
         // Android 13 and above
@@ -60,4 +74,6 @@ class MainActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+
 }

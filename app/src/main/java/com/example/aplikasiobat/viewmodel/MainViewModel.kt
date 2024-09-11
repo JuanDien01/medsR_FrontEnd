@@ -9,6 +9,8 @@ import com.example.aplikasiobat.api.request.DetailObatPasienRequest
 import com.example.aplikasiobat.api.request.LoginRequest
 import com.example.aplikasiobat.api.request.RegisterRequest
 import com.example.aplikasiobat.api.request.RegisterUserBiodataRequest
+import com.example.aplikasiobat.api.request.UpdateBiodataRequest
+import com.example.aplikasiobat.api.request.UpdatePasswordRequest
 import com.example.aplikasiobat.api.service.Resource
 import kotlinx.coroutines.Dispatchers
 
@@ -19,6 +21,14 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
         emit(Resource.loading(null))
         try {
             emit(Resource.success(data = mainRepository.registerUserBiodata(registerUserBiodataRequest)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
+    fun updateUserBiodata(updateBiodataRequest: UpdateBiodataRequest) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.updateUserBiodata(updateBiodataRequest)))
         }catch(exception:Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }
@@ -37,6 +47,14 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
         emit(Resource.loading(null))
         try {
             emit(Resource.success(data = mainRepository.login(loginRequest)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
+    fun updatePassword(updatePasswordRequest: UpdatePasswordRequest) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.updatePassword(updatePasswordRequest)))
         }catch(exception:Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }
