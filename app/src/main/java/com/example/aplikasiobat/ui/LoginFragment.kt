@@ -60,6 +60,9 @@ class LoginFragment : Fragment() {
             }
 
         }
+        binding.tvLupaPassword.setOnClickListener {
+            it.findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordUsernameFragment)
+        }
     }
 
     private fun login(userName: String, password: String) {
