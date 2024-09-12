@@ -2,11 +2,14 @@ package com.example.aplikasiobat.api.service
 
 
 import com.example.aplikasiobat.api.request.DetailObatPasienRequest
+import com.example.aplikasiobat.api.request.ForgotPasswordRequest
 import com.example.aplikasiobat.api.request.LoginRequest
 import com.example.aplikasiobat.api.request.RegisterRequest
 import com.example.aplikasiobat.api.request.RegisterUserBiodataRequest
 import com.example.aplikasiobat.api.request.UpdateBiodataRequest
 import com.example.aplikasiobat.api.request.UpdatePasswordRequest
+import com.example.aplikasiobat.api.response.auth.findusernameemail.ForgotPasswordUsernameResponse
+import com.example.aplikasiobat.api.response.auth.forgotpassword.ForgotPasswordResponse
 import com.example.aplikasiobat.api.response.dashboard.ObatPasien.GetObatPasienResponse
 import com.example.aplikasiobat.api.response.dashboard.detailObatPasien.DetailObatPasienResponse
 import com.example.aplikasiobat.api.response.dashboard.setting.GetUserBiodataByIdResponse
@@ -37,6 +40,12 @@ interface ApiService {
 
     @PUT("api/userBiodata/updateUserBiodata")
     suspend fun updateUserBiodata(@Body updateUserBiodataRequest: UpdateBiodataRequest): UpdateBiodataResponse
+
+    @GET("api/user/findUsername/{username}")
+    suspend fun findUsername(@Path("username") username: String): ForgotPasswordUsernameResponse
+
+    @PUT("api/user/forgotPassword")
+    suspend fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest) : ForgotPasswordResponse
 
     @GET("api/obatPasien/getObatPasienById/{idUser}")
     suspend fun getObatPasienById(@Path("idUser") idUser:Int): GetObatPasienResponse

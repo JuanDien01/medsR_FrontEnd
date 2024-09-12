@@ -122,6 +122,12 @@
         <action
             android:id="@+id/action_forgotPasswordEmailFragment_to_confirmNewPasswordFragment"
             app:destination="@id/confirmNewPasswordFragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+        <argument
+            android:name="email"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/confirmNewPasswordFragment"
@@ -133,6 +139,9 @@
         <action
             android:id="@+id/action_confirmNewPasswordFragment_to_confirmNewPasswordSuccessFragment"
             app:destination="@id/confirmNewPasswordSuccessFragment" />
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/confirmNewPasswordSuccessFragment"

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.aplikasiobat.api.repository.MainRepository
 import com.example.aplikasiobat.api.request.DetailObatPasienRequest
+import com.example.aplikasiobat.api.request.ForgotPasswordRequest
 import com.example.aplikasiobat.api.request.LoginRequest
 import com.example.aplikasiobat.api.request.RegisterRequest
 import com.example.aplikasiobat.api.request.RegisterUserBiodataRequest
@@ -55,6 +56,22 @@ class MainViewModel(private val mainRepository: MainRepository):ViewModel() {
         emit(Resource.loading(null))
         try {
             emit(Resource.success(data = mainRepository.updatePassword(updatePasswordRequest)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
+    fun findUsername(username: String) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.findUsername(username)))
+        }catch(exception:Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+        }
+    }
+    fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest) = liveData(Dispatchers.IO){
+        emit(Resource.loading(null))
+        try {
+            emit(Resource.success(data = mainRepository.forgotPassword(forgotPasswordRequest)))
         }catch(exception:Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
         }
