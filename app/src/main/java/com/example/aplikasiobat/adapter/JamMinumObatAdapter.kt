@@ -1,5 +1,6 @@
 package com.example.aplikasiobat.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -13,6 +14,12 @@ class JamMinumObatAdapter(
     private val onItemClick: (Data) -> Unit
 ) : ListAdapter<Data, JamMinumObatAdapter.JamMinumObatViewHolder>(JamMinumDiffCallback()) {
 
+    private var highlightedHours: String? = null
+
+    fun setHighlightedHours(hours: String) {
+        highlightedHours = hours
+        notifyDataSetChanged() // Refresh the adapter to apply changes
+    }
 
     inner class JamMinumObatViewHolder(val binding: ItemJamBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,6 +30,9 @@ class JamMinumObatAdapter(
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val item = getItem(position)
+                    // Update highlightedHours based on the clicked item
+                    setHighlightedHours(item.waktuMulaiMinumObat)
+                    // Call the onItemClick callback
                     onItemClick(item)
                 }
             }
@@ -31,60 +41,31 @@ class JamMinumObatAdapter(
         fun bind(detailObatPasienItem: Data) {
             binding.tvJam.text = detailObatPasienItem.waktuMulaiMinumObat
 
+            // Set colors based on the 'sudahMinumObat' status
             when (detailObatPasienItem.sudahMinumObat) {
                 "true" -> {
-                    binding.cardJam.strokeColor =
-                        ContextCompat.getColor(binding.root.context, R.color.success_border)
-                    binding.cardJam.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            R.color.success_border
-                        )
-                    )
-                    binding.tvJam.setTextColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            R.color.success_main
-                        )
-                    )
+                    binding.cardJam.strokeColor = ContextCompat.getColor(binding.root.context, R.color.success_border)
+                    binding.cardJam.setCardBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.success_border))
+                    binding.tvJam.setTextColor(ContextCompat.getColor(binding.root.context, R.color.success_main))
                 }
-
                 "false" -> {
-                    binding.cardJam.strokeColor =
-                        ContextCompat.getColor(binding.root.context, R.color.danger_border)
-                    binding.cardJam.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            R.color.danger_border
-                        )
-                    )
-                    binding.tvJam.setTextColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            R.color.danger_main
-                        )
-                    )
+                    binding.cardJam.strokeColor = ContextCompat.getColor(binding.root.context, R.color.danger_border)
+                    binding.cardJam.setCardBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.danger_border))
+                    binding.tvJam.setTextColor(ContextCompat.getColor(binding.root.context, R.color.danger_main))
                 }
-
                 null -> {
-                    binding.cardJam.strokeColor =
-                        ContextCompat.getColor(binding.root.context, R.color.neutral100)
-                    binding.cardJam.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            R.color.neutral10
-                        )
-                    )
-                    binding.tvJam.setTextColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            R.color.neutral100
-                        )
-                    )
+                    binding.cardJam.strokeColor = ContextCompat.getColor(binding.root.context, R.color.neutral100)
+                    binding.cardJam.setCardBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.neutral10))
+                    binding.tvJam.setTextColor(ContextCompat.getColor(binding.root.context, R.color.neutral100))
                 }
-
             }
 
+            // Change card elevation based on whether the item is highlighted
+            if (highlightedHours != null && detailObatPasienItem.waktuMulaiMinumObat == highlightedHours) {
+                binding.cardJam.cardElevation = 24f // Set elevation for active state
+            } else {
+                binding.cardJam.cardElevation = 2f // Set default elevation
+            }
         }
     }
 
@@ -97,6 +78,8 @@ class JamMinumObatAdapter(
         holder.bind(getItem(position))
     }
 }
+
+
 
 
 

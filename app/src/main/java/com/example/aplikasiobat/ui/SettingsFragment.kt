@@ -1,6 +1,7 @@
 package com.example.aplikasiobat.ui
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentSettingsBinding
+import com.example.aplikasiobat.services.NotificationService
 import com.example.aplikasiobat.viewmodel.DashboardViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
@@ -125,6 +127,8 @@ class SettingsFragment : Fragment() {
         dialogView.findViewById<MaterialButton>(R.id.btnKeluar).setOnClickListener {
             // Perform logout operation
             dashboardViewModel.clearUserData()
+            val notificationServiceIntent = Intent(context, NotificationService::class.java)
+            context?.stopService(notificationServiceIntent)
             findNavController().navigate(R.id.welcomeFragment)
             dialog.dismiss()
         }

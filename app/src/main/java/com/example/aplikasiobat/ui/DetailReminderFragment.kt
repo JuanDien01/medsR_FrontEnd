@@ -35,6 +35,7 @@ class DetailReminderFragment : Fragment() {
 
     private val args: DetailReminderFragmentArgs by navArgs()
     private var idObatPasien:Int ?= null
+    private var highlightedHours: String?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +67,8 @@ class DetailReminderFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val obatPasien = args.dataDetail
+        highlightedHours = args.highlightedHours
+        Log.d("asdadada", "onViewCreated: $highlightedHours")
         if (obatPasien.sudahMinumObat == "true") {
             binding.sudahMinumBtn.isEnabled = false
         }
@@ -97,6 +100,8 @@ class DetailReminderFragment : Fragment() {
         binding.rvJamMinumObat.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvJamMinumObat.adapter = adapter
+
+        adapter.setHighlightedHours(highlightedHours!!)
     }
 
     private fun getDetailObatPasien(request: DetailObatPasienRequest) {

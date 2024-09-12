@@ -1,6 +1,7 @@
 package com.example.aplikasiobat.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,8 +109,9 @@ class DashboardFragment : Fragment() {
     }
 
     private fun handleItemClick(obatPasien: Data) {
+        val highlightedHours = obatPasien.waktuMulaiMinumObat
         val action =
-            DashboardFragmentDirections.actionDashboardFragmentToDetailReminderFragment(obatPasien)
+            DashboardFragmentDirections.actionDashboardFragmentToDetailReminderFragment(obatPasien,highlightedHours)
         findNavController().navigate(action)
     }
 

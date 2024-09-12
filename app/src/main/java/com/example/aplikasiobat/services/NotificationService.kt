@@ -36,7 +36,7 @@ class NotificationService : Service() {
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
-    private val interval: Long = 100000 // 1 min, adjust as needed
+    private val interval: Long = 10000 // 100 sec, adjust as needed
     private lateinit var mainRepository: MainRepository
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -59,7 +59,6 @@ class NotificationService : Service() {
         createNotificationChannel()
         val notification = createNotification("Jadwal Minum Obat Kamu Sedang DiCek Ya \uD83D\uDE42")
         startForeground(1, notification)
-
         val apiHelper = ApiHelper(ApiClient.instance)
         mainRepository = MainRepository(apiHelper)
     }
@@ -100,8 +99,6 @@ class NotificationService : Service() {
         }
     }
 
-
-
     private fun scheduleNotification(notificationId: Int, message: String, startTime: String, endTime: String,
                                      userId: Int, idObat: Int, idObatPasien: Int, aturan: String,
                                      dosis: String, tanggalPemberian: String, namaObat: String, catatan: String) {
@@ -110,7 +107,7 @@ class NotificationService : Service() {
         // Intent to show the notification at start time
         val notificationIntent = Intent(this, NotificationReceiver::class.java).apply {
             putExtra("notificationId", notificationId)
-            putExtra("message", "Hai! Jangan Lupa Minum Obat $message sesuai jadwal hari ini. Tetap sehat dan semangat ya!")
+            putExtra("message", "Hai! Jangan Lupa Minum Obat sesuai jadwal hari ini. Tetap sehat dan semangat ya!")
             putExtra("idObatPasien", idObatPasien)
             putExtra("userId", userId)
             putExtra("idObat", idObat)
@@ -190,37 +187,23 @@ class NotificationService : Service() {
     }
 
     private fun createNotification(message: String): Notification {
-        // Set a custom sound (can be default alarm sound or custom sound)
-        val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-
-        // Define a vibration pattern
-        val vibrationPattern = longArrayOf(0, 1000, 500, 1000)
-
-        return NotificationCompat.Builder(this, "CHANNEL_ID")
+        return NotificationCompat.Builder(this, "CHANNEL_ID_FOR")
             .setSmallIcon(R.drawable.logo)
             .setContentTitle("MedsR Sedang Melakukan Magicnya \uD83E\uDE84")
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_MAX) // Set highest priority
-            .setCategory(NotificationCompat.CATEGORY_ALARM) // Set category to alarm
-            .setSound(alarmSound) // Set the alarm sound
-            .setVibrate(vibrationPattern) // Set vibration pattern
+            .setSound(null)
             .setAutoCancel(true)
             .build()
     }
 
-
     private fun createNotificationChannel() {
         val name = "Notification Service Channel"
         val descriptionText = "Channel for background notifications"
-        val importance = NotificationManager.IMPORTANCE_HIGH // Set to high importance for alarm-like behavior
-        val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
+        val importance = NotificationManager.IMPORTANCE_LOW // Set to high importance for alarm-like behavior
+        val channel = NotificationChannel("CHANNEL_ID_FOR", name, importance).apply {
             description = descriptionText
-            enableVibration(true) // Enable vibration
-            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build()
-            ) // Set the default alarm sound
+            setSound(null, null) // Disable sound
+            enableVibration(false)
         }
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

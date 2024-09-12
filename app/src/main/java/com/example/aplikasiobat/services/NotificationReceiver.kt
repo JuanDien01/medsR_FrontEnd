@@ -5,6 +5,8 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
 import androidx.core.app.NotificationCompat
 import com.example.aplikasiobat.MainActivity
 import com.example.aplikasiobat.R
@@ -43,6 +45,10 @@ class NotificationReceiver : BroadcastReceiver() {
             context, 0, clickIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+
+        // Define a vibration pattern
+        val vibrationPattern = longArrayOf(0, 1000, 500, 1000)
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notification = NotificationCompat.Builder(context, "CHANNEL_ID")
@@ -50,11 +56,14 @@ class NotificationReceiver : BroadcastReceiver() {
             .setContentTitle("Waktunya Minum Obat! \uD83D\uDC8A")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSound(alarmSound)
+            .setVibrate(vibrationPattern)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(notificationId, notification)
+        notificationManager.cancel(notificationId)
     }
 }
 

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.aplikasiobat.R
@@ -85,8 +86,13 @@ class LoginFragment : Fragment() {
                         putExtra("fullName", fullName)
                     }
                     requireContext().startService(intent)
+                    // Define navigation options
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(findNavController().graph.startDestinationId, true) // Pop up to the start destination
+                        .build()
 
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    // Navigate with options
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null, navOptions)
                 }
 
                 Status.ERROR -> {
