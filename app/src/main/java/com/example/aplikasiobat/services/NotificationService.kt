@@ -36,7 +36,7 @@ class NotificationService : Service() {
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
-    private val interval: Long = 10000 // 1 min, adjust as needed
+    private val interval: Long = 100000 // 1 min, adjust as needed
     private lateinit var mainRepository: MainRepository
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -102,14 +102,25 @@ class NotificationService : Service() {
 
 
 
-    private fun scheduleNotification(notificationId: Int, message: String, startTime: String, endTime: String, userId: Int, idObatPasien: Int) {
+    private fun scheduleNotification(notificationId: Int, message: String, startTime: String, endTime: String,
+                                     userId: Int, idObat: Int, idObatPasien: Int, aturan: String,
+                                     dosis: String, tanggalPemberian: String, namaObat: String, catatan: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // Intent to show the notification at start time
         val notificationIntent = Intent(this, NotificationReceiver::class.java).apply {
             putExtra("notificationId", notificationId)
             putExtra("message", "Hai! Jangan Lupa Minum Obat $message sesuai jadwal hari ini. Tetap sehat dan semangat ya!")
+            putExtra("idObatPasien", idObatPasien)
             putExtra("userId", userId)
+            putExtra("idObat", idObat)
+            putExtra("waktuMulaiMinumObat", startTime)
+            putExtra("waktuSelesaiMinumObat", endTime)
+            putExtra("dosisObat", dosis)
+            putExtra("aturan", aturan)
+            putExtra("tanggalPemberian", tanggalPemberian)
+            putExtra("namaObat", namaObat)
+            putExtra("catatan", catatan)
         }
 
         val showPendingIntent = PendingIntent.getBroadcast(
@@ -135,25 +146,44 @@ class NotificationService : Service() {
 
 
 
+
     private fun fetchObatPasien(userId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = mainRepository.getObatPasien(userId)
                 val obatData = response.data
+
                 obatData.forEach { data ->
                     // Only schedule a notification if sudahMinumObat is null (i.e., not "false" or "true")
-                    if (data.sudahMinumObat == null) {
-                        scheduleNotification(data.idObatPasien, data.namaObat, data.waktuMulaiMinumObat, data.waktuSelesaiMinumObat, data.idUser,data.idObatPasien)
+                    if (data.sudahMinumObat.isNullOrEmpty()) {
+                        // Log the scheduling for debugging purposes
+                        Log.d("NotificationService", "Scheduling notification for ${data.namaObat}")
+
+                        scheduleNotification(
+                            notificationId = data.idObatPasien, // Ensure a unique ID if needed
+                            message = data.namaObat,
+                            startTime = data.waktuMulaiMinumObat,
+                            endTime = data.waktuSelesaiMinumObat,
+                            userId = data.idUser,
+                            idObat = data.idObat,
+                            idObatPasien = data.idObatPasien,
+                            aturan = data.aturanPenggunaanObat,
+                            dosis = data.dosisObat,
+                            tanggalPemberian = data.tanggalDiberikan,
+                            namaObat = data.namaObat,
+                            catatan = data.catatan
+                        )
                     } else {
-                        Log.d("NotificationService", "No notification for ${data.namaObat}, sudah_minum is ${data.sudahMinumObat}")
+                        Log.d("NotificationService", "No notification for ${data.namaObat}, sudahMinumObat is ${data.sudahMinumObat}")
                     }
                 }
 
             } catch (e: Exception) {
-                Log.e("Service", "Exception during fetch: ${e.message}")
+                Log.e("Service", "Exception during fetch: ${e.message}", e)
             }
         }
     }
+
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

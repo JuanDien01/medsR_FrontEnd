@@ -5,6 +5,11 @@
     android:id="@+id/main_nav"
     app:startDestination="@id/welcomeFragment">
 
+    <action
+        android:id="@+id/action_global_detailReminderFragment"
+        app:destination="@id/detailReminderFragment" />
+
+
     <argument
         android:name="email"
         app:argType="string"
@@ -78,6 +83,7 @@
         <argument
             android:name="dataDetail"
             app:argType="com.example.aplikasiobat.api.response.dashboard.ObatPasien.Data" />
+
         <action
             android:id="@+id/action_detailReminderFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
