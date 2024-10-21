@@ -19,9 +19,13 @@ import com.example.aplikasiobat.api.service.ApiClient
 import com.example.aplikasiobat.api.service.ApiHelper
 import com.example.aplikasiobat.api.service.Status
 import com.example.aplikasiobat.databinding.FragmentDashboardBinding
+import com.example.aplikasiobat.services.ObatPasienUpdateEvent
 import com.example.aplikasiobat.viewmodel.DashboardViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModel
 import com.example.aplikasiobat.viewmodel.MainViewModelFactory
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -53,6 +57,21 @@ class DashboardFragment : Fragment() {
 
         return binding.root
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        EventBus.getDefault().register(this)
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        EventBus.getDefault().unregister(this)
+//    }
+
+//    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+//    fun onObatPasienUpdateEvent(event: ObatPasienUpdateEvent) {
+//        getObatPasienSemua(event.userId)
+//    }
 
     private fun setTime(hours: Int) {
         binding.welcomMsg.text = when (hours) {

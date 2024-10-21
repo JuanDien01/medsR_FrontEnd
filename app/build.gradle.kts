@@ -70,6 +70,10 @@ dependencies {
     //lottie
     implementation ("com.airbnb.android:lottie:6.5.1")
 
+    //eventBus
+    implementation ("org.greenrobot:eventbus:3.3.1")
+
+
 
 
 }

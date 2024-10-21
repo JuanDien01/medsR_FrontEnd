@@ -51,19 +51,19 @@ class NotificationReceiver : BroadcastReceiver() {
         val vibrationPattern = longArrayOf(0, 1000, 500, 1000)
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification = NotificationCompat.Builder(context, "CHANNEL_ID")
+        val notification = NotificationCompat.Builder(context, "CHANNEL_ID_FOR")
             .setSmallIcon(R.drawable.logo)
             .setContentTitle("Waktunya Minum Obat! \uD83D\uDC8A")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSound(alarmSound)
             .setVibrate(vibrationPattern)
-            .setAutoCancel(true)
             .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .build()
 
         notificationManager.notify(notificationId, notification)
-        notificationManager.cancel(notificationId)
     }
 }
+
 

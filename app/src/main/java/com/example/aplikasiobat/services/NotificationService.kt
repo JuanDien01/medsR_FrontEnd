@@ -30,6 +30,9 @@ import com.example.aplikasiobat.api.service.ApiHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class NotificationService : Service() {
@@ -57,8 +60,8 @@ class NotificationService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        val notification = createNotification("Jadwal Minum Obat Kamu Sedang DiCek Ya \uD83D\uDE42")
-        startForeground(1, notification)
+        val notification = createForegroundNotification("Jadwal Minum Obat Kamu Sedang DiCek Ya \uD83D\uDE42")
+        startForeground(1, notification) // Foreground notification with ID 1
         val apiHelper = ApiHelper(ApiClient.instance)
         mainRepository = MainRepository(apiHelper)
     }
@@ -67,6 +70,10 @@ class NotificationService : Service() {
         super.onDestroy()
         handler.removeCallbacks(runnable)
     }
+
+//    private fun handleMedicationTimeExceeded(userId: Int) {
+//        EventBus.getDefault().post(ObatPasienUpdateEvent(userId))
+//    }
 
     private fun parseTime(timeString: String): Calendar {
         val calendar = Calendar.getInstance()
@@ -82,20 +89,6 @@ class NotificationService : Service() {
             alarmManager.canScheduleExactAlarms()
         } else {
             true
-        }
-    }
-
-    private fun requestExactAlarmPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!canScheduleExactAlarms()) {
-                val intent = Intent(
-                    Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
-                    Uri.parse("package:${packageName}")
-                ).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(intent)
-            }
         }
     }
 
@@ -129,20 +122,9 @@ class NotificationService : Service() {
 
         val startCalendar = parseTime(startTime)
 
-        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-        val wakeLock = powerManager.newWakeLock(
-            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-            "MedsR::NotificationWakeLock"
-        )
-        wakeLock.acquire(5000) // Acquire the wake lock for 5 seconds
-
         // Schedule the notification to appear at start time
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, startCalendar.timeInMillis, showPendingIntent)
     }
-
-
-
-
 
     private fun fetchObatPasien(userId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -150,28 +132,44 @@ class NotificationService : Service() {
                 val response = mainRepository.getObatPasien(userId)
                 val obatData = response.data
 
-                obatData.forEach { data ->
-                    // Only schedule a notification if sudahMinumObat is null (i.e., not "false" or "true")
-                    if (data.sudahMinumObat.isNullOrEmpty()) {
-                        // Log the scheduling for debugging purposes
-                        Log.d("NotificationService", "Scheduling notification for ${data.namaObat}")
+                val currentTime = LocalTime.now()
 
-                        scheduleNotification(
-                            notificationId = data.idObatPasien, // Ensure a unique ID if needed
-                            message = data.namaObat,
-                            startTime = data.waktuMulaiMinumObat,
-                            endTime = data.waktuSelesaiMinumObat,
-                            userId = data.idUser,
-                            idObat = data.idObat,
-                            idObatPasien = data.idObatPasien,
-                            aturan = data.aturanPenggunaanObat,
-                            dosis = data.dosisObat,
-                            tanggalPemberian = data.tanggalDiberikan,
-                            namaObat = data.namaObat,
-                            catatan = data.catatan
-                        )
+                obatData.forEach { data ->
+                    val waktuSelesaiMinumObat = LocalTime.parse(data.waktuSelesaiMinumObat, DateTimeFormatter.ofPattern("HH:mm"))
+
+                    // Check if the current time exceeds the medication end time
+                    if (currentTime.isAfter(waktuSelesaiMinumObat)) {
+                        // If time exceeded and sudahMinumObat is false or null, update status
+                        if (data.sudahMinumObat.isNullOrEmpty() || data.sudahMinumObat == "false") {
+                            Log.d("NotificationService", "Time exceeded for ${data.namaObat}, updating status")
+
+//                            handleMedicationTimeExceeded(userId)
+
+                            // Update the status via the API to mark as not taken
+                            mainRepository.updateSudahMinum(data.idObatPasien, "false")
+                        }
                     } else {
-                        Log.d("NotificationService", "No notification for ${data.namaObat}, sudahMinumObat is ${data.sudahMinumObat}")
+                        // Schedule notification if time has not exceeded and sudahMinumObat is null
+                        if (data.sudahMinumObat.isNullOrEmpty()) {
+                            Log.d("NotificationService", "Scheduling notification for ${data.namaObat}")
+
+                            scheduleNotification(
+                                notificationId = data.idObatPasien, // Unique notification ID
+                                message = data.namaObat,
+                                startTime = data.waktuMulaiMinumObat,
+                                endTime = data.waktuSelesaiMinumObat,
+                                userId = data.idUser,
+                                idObat = data.idObat,
+                                idObatPasien = data.idObatPasien,
+                                aturan = data.aturanPenggunaanObat,
+                                dosis = data.dosisObat,
+                                tanggalPemberian = data.tanggalDiberikan,
+                                namaObat = data.namaObat,
+                                catatan = data.catatan
+                            )
+                        } else {
+                            Log.d("NotificationService", "No action needed for ${data.namaObat}, sudahMinumObat is ${data.sudahMinumObat}")
+                        }
                     }
                 }
 
@@ -186,12 +184,12 @@ class NotificationService : Service() {
         return null
     }
 
-    private fun createNotification(message: String): Notification {
+    private fun createForegroundNotification(message: String): Notification {
         return NotificationCompat.Builder(this, "CHANNEL_ID_FOR")
             .setSmallIcon(R.drawable.logo)
             .setContentTitle("MedsR Sedang Melakukan Magicnya \uD83E\uDE84")
             .setContentText(message)
-            .setSound(null)
+            .setSound(null) // No sound for foreground notification
             .setAutoCancel(true)
             .build()
     }
@@ -199,7 +197,7 @@ class NotificationService : Service() {
     private fun createNotificationChannel() {
         val name = "Notification Service Channel"
         val descriptionText = "Channel for background notifications"
-        val importance = NotificationManager.IMPORTANCE_LOW // Set to high importance for alarm-like behavior
+        val importance = NotificationManager.IMPORTANCE_LOW
         val channel = NotificationChannel("CHANNEL_ID_FOR", name, importance).apply {
             description = descriptionText
             setSound(null, null) // Disable sound
@@ -209,8 +207,8 @@ class NotificationService : Service() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
-
 }
+
 
 
 
